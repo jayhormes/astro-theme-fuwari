@@ -35,7 +35,7 @@ export const siteConfig: SiteConfig = {
 			speed: 100, // Typing speed in milliseconds
 			delay: 2000, // Delay between texts in milliseconds
 			fontSize: "3rem",
-			fontFamily: "'Fira Code', 'JetBrains Mono', Consolas, monospace", 
+			fontFamily: "'Fira Code', 'JetBrains Mono', Consolas, monospace",
 			fontWeight: "700", // (100-900 or normal, bold)
 			color: "#ffffffff",
 			cursorColor: "#000000",
