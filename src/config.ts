@@ -38,7 +38,7 @@ export const siteConfig: SiteConfig = {
 			fontFamily: "'Fira Code', 'JetBrains Mono', Consolas, monospace", 
 			fontWeight: "700", // (100-900 or normal, bold)
 			color: "#ffffffff",
-			cursorColor: "#f78fb3",
+			cursorColor: "#000000",
 			textAlign: "center",
 		},
 	},
