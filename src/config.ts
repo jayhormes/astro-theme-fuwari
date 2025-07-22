@@ -27,10 +27,10 @@ export const siteConfig: SiteConfig = {
 		typewriter: {
 			enable: false,
 			texts: [
-				"Welcome to Life Compiler.",
-				"My morning starts at 5. Compiled last night.",
-				"Reclaim time through code.",
-				"Refactor your day, recompile your habits.",
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+				"Lorem Ipsum",
+				"dolor sit amet",
+				"consectetur adipiscing elit",
 			],
 			speed: 100, // Typing speed in milliseconds
 			delay: 2000, // Delay between texts in milliseconds
