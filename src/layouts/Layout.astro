@@ -38,12 +38,14 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 // defines global css variables
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
+
+// Use post cover as banner if provided, otherwise use default banner
 if (!banner || typeof banner !== "string" || banner.trim() === "") {
 	banner = siteConfig.banner.src;
 }
 
-// TODO don't use post cover as banner for now
-banner = siteConfig.banner.src;
+// Determine if we should use the custom banner (post cover) or default banner
+const isUsingCustomBanner = banner !== siteConfig.banner.src;
 
 const enableBanner = siteConfig.banner.enable;
 
@@ -150,6 +152,8 @@ const bannerOffset =
 	</head>
 	<body class=" min-h-screen transition " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}
 		  data-overlayscrollbars-initialize
+		  data-banner-src={banner}
+		  data-is-using-custom-banner={isUsingCustomBanner}
 	>
 		<ConfigCarrier></ConfigCarrier>
 		<slot />
@@ -363,12 +367,90 @@ function showBanner() {
 	banner.classList.remove('opacity-0', 'scale-105');
 }
 
+function updateBannerForPage() {
+	console.log('updateBannerForPage called');
+	if (!siteConfig.banner.enable) {
+		console.log('Banner disabled, skipping update');
+		return;
+	}
+	
+	// Read banner info from page data script
+	const pageDataScript = document.getElementById('page-banner-data');
+	if (!pageDataScript) {
+		console.log('Page banner data script not found');
+		return;
+	}
+	
+	let pageData;
+	try {
+		pageData = JSON.parse(pageDataScript.textContent || '{}');
+		console.log('Page data:', pageData);
+	} catch (e) {
+		console.error('Failed to parse page banner data:', e);
+		return;
+	}
+	
+	const { bannerSrc, isHomePage, isUsingCustomBanner, showTypewriter } = pageData;
+	
+	// Update banner image
+	const bannerImg = document.querySelector('#banner img') as HTMLImageElement;
+	if (bannerImg && bannerSrc) {
+		// Handle different image path formats
+		let imgSrc = bannerSrc;
+		if (bannerSrc.startsWith('assets/')) {
+			imgSrc = `/${bannerSrc}`;
+		} else if (!bannerSrc.startsWith('/') && !bannerSrc.startsWith('http')) {
+			imgSrc = `/${bannerSrc}`;
+		}
+		console.log('Updating banner image from', bannerImg.src, 'to', imgSrc);
+		bannerImg.src = imgSrc;
+	} else {
+		console.log('Banner image element not found or no banner src');
+	}
+	
+	// Update typewriter effect visibility  
+	const typewriterWrapper = document.querySelector('#typewriter-overlay') as HTMLElement;
+	if (typewriterWrapper) {
+		if (showTypewriter) {
+			console.log('Showing typewriter effect');
+			typewriterWrapper.classList.remove('hidden');
+		} else {
+			console.log('Hiding typewriter effect');
+			typewriterWrapper.classList.add('hidden');
+		}
+	} else {
+		console.log('Typewriter wrapper not found');
+	}
+	
+	// Update fog overlay visibility for custom banners
+	const fogOverlay = document.querySelector('#banner-fog-overlay') as HTMLElement;
+	if (fogOverlay) {
+		if (isUsingCustomBanner) {
+			console.log('Showing fog overlay for custom banner');
+			fogOverlay.classList.remove('opacity-0');
+			fogOverlay.classList.add('opacity-100');
+		} else {
+			console.log('Hiding fog overlay for default banner');
+			fogOverlay.classList.remove('opacity-100');
+			fogOverlay.classList.add('opacity-0');
+		}
+	} else {
+		console.log('Fog overlay not found');
+	}
+	
+	// Show banner after update
+	setTimeout(() => {
+		showBanner();
+	}, 100);
+}
+
 function init() {
 	// disableAnimation()()		// TODO
 	loadTheme();
 	loadHue();
 	initCustomScrollbar();
 	showBanner();
+	updateBannerForPage(); // Update banner for initial page load
 }
 
 /* Load settings when entering the site */
@@ -405,6 +487,10 @@ const setup = () => {
 		}
 	})
 	window.swup.hooks.on('content:replace', initCustomScrollbar)
+	window.swup.hooks.on('content:replace', () => {
+		console.log('Swup content:replace hook triggered');
+		updateBannerForPage();
+	})
 	window.swup.hooks.on('visit:start', (visit: {to: {url: string}}) => {
 		// change banner height immediately when a link is clicked
 		const bodyElement = document.querySelector('body')

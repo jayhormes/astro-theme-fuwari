@@ -41,6 +41,14 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 // Check if current page is home page
 const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 
+// Determine which banner to use
+const currentBanner = banner || siteConfig.banner.src;
+const isUsingCustomBanner = banner && banner !== siteConfig.banner.src;
+
+// Only show typewriter effect on home page with default banner
+const showTypewriter =
+	siteConfig.banner.typewriter.enable && isHomePage && !isUsingCustomBanner;
+
 const mainPanelTop = siteConfig.banner.enable
 	? `calc(${BANNER_HEIGHT}vh - ${MAIN_PANEL_OVERLAPS_BANNER_HEIGHT}rem)`
 	: "5.5rem";
@@ -59,27 +67,37 @@ const mainPanelTop = siteConfig.banner.enable
 <!-- Banner -->
 {siteConfig.banner.enable && <div id="banner-wrapper" class={`absolute z-10 w-full transition duration-700 overflow-hidden`} style={`top: -${BANNER_HEIGHT_EXTEND}vh`}>
     <ImageWrapper id="banner" alt="Banner image of the blog" class:list={["object-cover h-full transition duration-700 opacity-0 scale-105"]}
-                  src={siteConfig.banner.src} position={siteConfig.banner.position}
+                  src={currentBanner} position={siteConfig.banner.position} basePath="/"
     >
     </ImageWrapper>
     
-    <!-- Typewriter Text Overlay -->
-    {siteConfig.banner.typewriter.enable && isHomePage && (
-        <div class="absolute inset-0 flex items-center justify-center z-20">
-            <TypewriterText 
-                texts={siteConfig.banner.typewriter.texts}
-                speed={siteConfig.banner.typewriter.speed || 100}
-                delay={siteConfig.banner.typewriter.delay || 2000}
-                fontSize={siteConfig.banner.typewriter.fontSize || "2.5rem"}
-                fontFamily={siteConfig.banner.typewriter.fontFamily || "inherit"}
-                fontWeight={siteConfig.banner.typewriter.fontWeight || "600"}
-                color={siteConfig.banner.typewriter.color || "#ffffff"}
-                cursorColor={siteConfig.banner.typewriter.cursorColor || "#00ff88"}
-                textAlign={siteConfig.banner.typewriter.textAlign || "center"}
-                client:load
-            />
-        </div>
-    )}
+    <!-- Fog overlay for custom banners (article covers) -->
+    <div class="absolute inset-0 z-15 pointer-events-none transition-opacity duration-700 banner-fog-overlay" 
+         class:list={[{"opacity-0": !isUsingCustomBanner, "opacity-100": isUsingCustomBanner}]} 
+         id="banner-fog-overlay">
+        <!-- Main gradient fog effect -->
+        <div class="absolute inset-0 banner-fog-gradient"></div>
+        <!-- Subtle texture overlay for depth -->
+        <div class="absolute inset-0 banner-fog-texture"></div>
+        <!-- Enhanced bottom fade for better text readability -->
+        <div class="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black/50 via-black/20 to-transparent"></div>
+    </div>
+    
+    <!-- Typewriter Text Overlay - Only show on home page with default banner -->
+    <div class="absolute inset-0 flex items-center justify-center z-20" class:list={[{"hidden": !showTypewriter}]} id="typewriter-overlay">
+        <TypewriterText 
+            texts={siteConfig.banner.typewriter.texts}
+            speed={siteConfig.banner.typewriter.speed || 100}
+            delay={siteConfig.banner.typewriter.delay || 2000}
+            fontSize={siteConfig.banner.typewriter.fontSize || "2.5rem"}
+            fontFamily={siteConfig.banner.typewriter.fontFamily || "inherit"}
+            fontWeight={siteConfig.banner.typewriter.fontWeight || "600"}
+            color={siteConfig.banner.typewriter.color || "#ffffff"}
+            cursorColor={siteConfig.banner.typewriter.cursorColor || "#00ff88"}
+            textAlign={siteConfig.banner.typewriter.textAlign || "center"}
+            client:load
+        />
+    </div>
 </div>}
 
 <!-- Main content -->
@@ -106,6 +124,14 @@ const mainPanelTop = siteConfig.banner.enable
             <SideBar class="mb-4 row-start-2 row-end-3 col-span-2 lg:row-start-1 lg:row-end-2 lg:col-span-1 lg:max-w-[17.5rem] onload-animation" headings={headings}></SideBar>
 
             <main id="swup-container" class="transition-swup-fade col-span-2 lg:col-span-1 overflow-hidden">
+                <!-- Page data for dynamic banner updates -->
+                <script id="page-banner-data" type="application/json" set:html={JSON.stringify({
+                    bannerSrc: currentBanner,
+                    isHomePage: isHomePage,
+                    isUsingCustomBanner: isUsingCustomBanner,
+                    showTypewriter: showTypewriter
+                })}></script>
+                
                 <div id="content-wrapper" class="onload-animation">
                     <!-- the overflow-hidden here prevent long text break the layout-->
                     <!-- make id different from windows.swup global property -->
