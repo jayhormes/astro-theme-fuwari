@@ -1,51 +1,51 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+import { onMount } from "svelte";
 
-	export let texts: string[] = [];
-	export let speed: number = 100;
-	export let delay: number = 2000;
-	export let fontSize: string = '2.5rem';
-	export let fontFamily: string = 'inherit';
-	export let fontWeight: string = '600';
-	export let color: string = 'inherit';
-	export let cursorColor: string = 'currentColor';
-	export let textAlign: string = 'center';
+export let texts: string[] = [];
+export let speed = 100;
+export let delay = 2000;
+export let fontSize = "2.5rem";
+export let fontFamily = "inherit";
+export let fontWeight = "600";
+export let color = "inherit";
+export let cursorColor = "currentColor";
+export let textAlign = "center";
 
-	let currentText = '';
-	let currentIndex = 0;
-	let isTyping = true;
-	let charIndex = 0;
+let currentText = "";
+let currentIndex = 0;
+let isTyping = true;
+let charIndex = 0;
 
-	onMount(() => {
-		if (texts.length === 0) return;
+onMount(() => {
+	if (texts.length === 0) return;
 
-		const typeWriter = () => {
-			const fullText = texts[currentIndex];
+	const typeWriter = () => {
+		const fullText = texts[currentIndex];
 
-			if (isTyping) {
-				if (charIndex < fullText.length) {
-					currentText = fullText.substring(0, charIndex + 1);
-					charIndex++;
-					setTimeout(typeWriter, speed);
-				} else {
-					isTyping = false;
-					setTimeout(typeWriter, delay);
-				}
+		if (isTyping) {
+			if (charIndex < fullText.length) {
+				currentText = fullText.substring(0, charIndex + 1);
+				charIndex++;
+				setTimeout(typeWriter, speed);
 			} else {
-				if (charIndex > 0) {
-					currentText = fullText.substring(0, charIndex - 1);
-					charIndex--;
-					setTimeout(typeWriter, speed / 2);
-				} else {
-					isTyping = true;
-					currentIndex = (currentIndex + 1) % texts.length;
-					setTimeout(typeWriter, speed);
-				}
+				isTyping = false;
+				setTimeout(typeWriter, delay);
 			}
-		};
+		} else {
+			if (charIndex > 0) {
+				currentText = fullText.substring(0, charIndex - 1);
+				charIndex--;
+				setTimeout(typeWriter, speed / 2);
+			} else {
+				isTyping = true;
+				currentIndex = (currentIndex + 1) % texts.length;
+				setTimeout(typeWriter, speed);
+			}
+		}
+	};
 
-		typeWriter();
-	});
+	typeWriter();
+});
 </script>
 
 <div class="typewriter-container" style="font-size: {fontSize}; font-family: {fontFamily}; font-weight: {fontWeight}; color: {color}; text-align: {textAlign};">
