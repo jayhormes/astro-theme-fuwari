@@ -21,6 +21,7 @@ interface Post {
 		tags: string[];
 		category?: string;
 		published: Date;
+		image?: string;
 	};
 }
 
@@ -107,9 +108,27 @@ onMount(async () => {
                 <a
                         href={getPostUrlBySlug(post.slug)}
                         aria-label={post.data.title}
-                        class="group btn-plain !block h-10 w-full rounded-lg hover:text-[initial]"
+                        class="group btn-plain !block h-10 w-full rounded-lg hover:text-[initial] relative overflow-hidden"
+                        style="transition: all 0.3s ease"
                 >
-                    <div class="flex flex-row justify-start items-center h-full">
+                    <!-- Background image overlay -->
+                    {#if post.data.image}
+                        <div 
+                            class="absolute right-0 top-0 w-1/3 h-full opacity-0 group-hover:opacity-20 transition-all duration-500 ease-in-out bg-cover bg-center bg-no-repeat pointer-events-none"
+                            style="background-image: url('{post.data.image}'); 
+                                   background-position: center center;
+                                   background-size: cover;
+                                   filter: blur(0.5px);"
+                        ></div>
+                        <!-- Gradient overlay for better text readability -->
+                        <div 
+                            class="absolute right-0 top-0 w-1/3 h-full opacity-0 group-hover:opacity-40 transition-all duration-500 ease-in-out pointer-events-none"
+                            style="background: linear-gradient(90deg, transparent 0%, var(--card-bg) 100%);"
+                        ></div>
+                    {/if}
+                    
+                    <!-- Content overlay -->
+                    <div class="relative z-10 flex flex-row justify-start items-center h-full">
                         <!-- date -->
                         <div class="w-[15%] md:w-[10%] transition text-sm text-right text-50">
                             {formatDate(post.data.published)}
