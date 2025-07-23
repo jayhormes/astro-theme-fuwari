@@ -10,6 +10,9 @@ export type SiteConfig = {
 		hue: number;
 		fixed: boolean;
 	};
+	gallery: {
+		collections: GalleryCollection[];
+	};
 	banner: {
 		enable: boolean;
 		src: string;
@@ -46,11 +49,19 @@ export type Favicon = {
 	sizes?: string;
 };
 
+export type GalleryCollection = {
+	name: string;
+	description?: string;
+	tags: string[];
+	displayMode?: "grid" | "table";
+};
+
 export enum LinkPreset {
 	Home = 0,
 	Archive = 1,
-	Projects = 2,
-	About = 3,
+	Gallery = 2,
+	Projects = 3,
+	About = 4,
 }
 
 export type NavBarLink = {

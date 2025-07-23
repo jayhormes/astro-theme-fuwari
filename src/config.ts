@@ -15,6 +15,22 @@ export const siteConfig: SiteConfig = {
 		hue: 250, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
 		fixed: false, // Hide the theme color picker for visitors
 	},
+	gallery: {
+		collections: [
+			{
+				name: "Reading Notes",
+				description: "Collection of reading reviews and notes",
+				tags: ["reading"],
+				displayMode: "table",
+			},
+			{
+				name: "Travel Experiences",
+				description: "Travel blogs and experiences",
+				tags: ["travel"],
+				displayMode: "grid",
+			},
+		],
+	},
 	banner: {
 		enable: true,
 		src: "/demo-banner.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
@@ -60,6 +76,7 @@ export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
 		LinkPreset.Archive,
+		LinkPreset.Gallery,
 		LinkPreset.Projects,
 		LinkPreset.About,
 		{

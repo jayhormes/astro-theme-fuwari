@@ -41,6 +41,7 @@ This fork includes the following additional features:
 - Posts with cover images will show a thumbnail preview on hover in the article list. 
 - [x] Notion-Style Tags with Tooltip
 - Tags are styled like Notion, and hovering on a post in the list shows tags as speech-bubble tooltips.
+- [x] Gallery
 
 ## 🚀 Getting Started
 

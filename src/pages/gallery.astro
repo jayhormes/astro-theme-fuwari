@@ -1,0 +1,176 @@
+---
+import { siteConfig } from "../config";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+import { getSortedPostsList } from "../utils/content-utils";
+
+const sortedPostsList = await getSortedPostsList();
+const galleryCollections = siteConfig.gallery?.collections || [];
+
+// Filter posts for each collection
+const collectionsWithPosts = galleryCollections.map((collection) => {
+	const filteredPosts = sortedPostsList.filter((post) =>
+		post.data.tags?.some((tag) =>
+			collection.tags.some(
+				(collectionTag) => tag.toLowerCase() === collectionTag.toLowerCase(),
+			),
+		),
+	);
+	return {
+		...collection,
+		posts: filteredPosts,
+	};
+});
+
+function formatDate(date: Date) {
+	return date.toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "short",
+		day: "numeric",
+	});
+}
+
+function getPostUrl(slug: string) {
+	return `/posts/${slug}/`;
+}
+---
+
+<MainGridLayout title={i18n(I18nKey.gallery)}>
+    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+        <div class="card-base z-10 px-9 py-6 relative w-full">
+            <div class="mb-6">
+                <h1 class="text-3xl font-bold mb-4 text-neutral-900 dark:text-neutral-100">Gallery Collections</h1>
+            </div>
+
+            <!-- Collections -->
+            {collectionsWithPosts.map((collection, index) => (
+                <div class="mb-8">
+                    <!-- Collection Header -->
+                    <div class="mb-6 p-4 bg-[var(--card-bg)] rounded-lg border border-[var(--line-divider)]">
+                        <h2 class="text-xl font-semibold mb-2 text-neutral-900 dark:text-neutral-100">{collection.name}</h2>
+                        {collection.description && (
+                            <p class="text-neutral-600 dark:text-neutral-400 mb-2">{collection.description}</p>
+                        )}
+                        <div class="flex flex-wrap gap-2 mb-2">
+                            {collection.tags.map(tag => (
+                                <span class="px-2 py-1 text-xs bg-[var(--primary)] text-white rounded">
+                                    #{tag}
+                                </span>
+                            ))}
+                        </div>
+                        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+                            Found {collection.posts.length} posts
+                        </p>
+                    </div>
+
+                    <!-- Posts Display -->
+                    {collection.posts.length > 0 ? (
+                        collection.displayMode === 'table' ? (
+                            <!-- Table View -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-[var(--line-divider)]">
+                                            <th class="text-left py-3 px-4 font-semibold text-neutral-900 dark:text-neutral-100">Cover</th>
+                                            <th class="text-left py-3 px-4 font-semibold text-neutral-900 dark:text-neutral-100">Title</th>
+                                            <th class="text-left py-3 px-4 font-semibold text-neutral-900 dark:text-neutral-100">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {collection.posts.map(post => (
+                                            <tr class="group border-b border-[var(--line-divider)] hover:bg-[var(--btn-plain-bg-hover)] transition-all duration-300 ease-in-out">
+                                                <td class="py-3 px-4">
+                                                    {post.data.image ? (
+                                                        <img 
+                                                            src={post.data.image} 
+                                                            alt={post.data.title}
+                                                            class="w-16 h-16 object-cover rounded-lg transition-all duration-300 group-hover:shadow-lg"
+                                                        />
+                                                    ) : (
+                                                        <div class="w-16 h-16 bg-[var(--line-divider)] rounded-lg flex items-center justify-center transition-all duration-300 group-hover:bg-[var(--primary)] group-hover:bg-opacity-20">
+                                                            <span class="text-xs text-neutral-500 dark:text-neutral-400 group-hover:text-[var(--primary)]">No Image</span>
+                                                        </div>
+                                                    )}
+                                                </td>
+                                                <td class="py-3 px-4">
+                                                    <a 
+                                                        href={getPostUrl(post.slug)} 
+                                                        class="font-medium text-neutral-900 dark:text-neutral-100 hover:text-[var(--primary)] transition-all duration-300 group-hover:translate-x-1"
+                                                    >
+                                                        {post.data.title}
+                                                    </a>
+                                                    {post.data.description && (
+                                                        <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1 transition-all duration-300 group-hover:text-neutral-700 dark:group-hover:text-neutral-300">
+                                                            {post.data.description}
+                                                        </p>
+                                                    )}
+                                                </td>
+                                                <td class="py-3 px-4 text-sm text-neutral-500 dark:text-neutral-400 transition-all duration-300 group-hover:text-[var(--primary)]">
+                                                    {formatDate(post.data.published)}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ) : (
+                            <!-- Grid View -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {collection.posts.map(post => (
+                                    <div class="group bg-[var(--card-bg)] rounded-lg border border-[var(--line-divider)] overflow-hidden hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/30 transition-all duration-300 ease-in-out hover:scale-105 hover:border-[var(--primary)] hover:border-opacity-50">
+                                        {post.data.image ? (
+                                            <img 
+                                                src={post.data.image} 
+                                                alt={post.data.title}
+                                                class="w-full h-48 object-cover transition-all duration-300 group-hover:scale-110"
+                                            />
+                                        ) : (
+                                            <div class="w-full h-48 bg-[var(--line-divider)] flex items-center justify-center transition-all duration-300 group-hover:bg-[var(--primary)] group-hover:bg-opacity-20">
+                                                <span class="text-neutral-500 dark:text-neutral-400 transition-all duration-300 group-hover:text-[var(--primary)]">No Image</span>
+                                            </div>
+                                        )}
+                                        <div class="p-4">
+                                            <h3 class="font-semibold mb-2">
+                                                <a 
+                                                    href={getPostUrl(post.slug)} 
+                                                    class="text-neutral-900 dark:text-neutral-100 hover:text-[var(--primary)] transition-all duration-300 group-hover:text-[var(--primary)]"
+                                                >
+                                                    {post.data.title}
+                                                </a>
+                                            </h3>
+                                            {post.data.description && (
+                                                <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-3 transition-all duration-300 group-hover:text-neutral-700 dark:group-hover:text-neutral-300">
+                                                    {post.data.description}
+                                                </p>
+                                            )}
+                                            <div class="flex justify-between items-center text-sm">
+                                                <span class="text-neutral-500 dark:text-neutral-400 transition-all duration-300 group-hover:text-[var(--primary)]">
+                                                    {formatDate(post.data.published)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )
+                    ) : (
+                        <div class="text-center py-12">
+                            <p class="text-neutral-600 dark:text-neutral-400">
+                                No posts found for this collection. Try adding posts with tags: {collection.tags.join(', ')}
+                            </p>
+                        </div>
+                    )}
+                </div>
+            ))}
+
+            {galleryCollections.length === 0 && (
+                <div class="text-center py-12">
+                    <p class="text-neutral-600 dark:text-neutral-400">
+                        No collections configured.
+                    </p>
+                </div>
+            )}
+        </div>
+    </div>
+</MainGridLayout>
