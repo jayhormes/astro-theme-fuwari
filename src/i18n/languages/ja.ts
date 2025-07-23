@@ -5,6 +5,7 @@ export const ja: Translation = {
 	[Key.home]: "Home",
 	[Key.about]: "About",
 	[Key.archive]: "Archive",
+	[Key.gallery]: "ギャラリー",
 	[Key.projects]: "プロジェクト",
 	[Key.search]: "検索",
 
