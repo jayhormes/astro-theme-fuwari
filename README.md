@@ -29,6 +29,19 @@ A static blog template built with [Astro](https://astro.build).
 - [x] Table of contents
 - [x] RSS feed
 
+## 🛠️ Custom Enhancements (by Maintainer)
+
+This fork includes the following additional features:
+
+- [x] Typing Effect on Homepage Banner
+A customizable typing animation added to the homepage banner.
+- [x] Frosted Cover Image on Article Page
+If a post has a cover image, it will be displayed as a frosted banner at the top of the article page.
+- [x] Hover Thumbnail Preview in Post List
+Posts with cover images will show a thumbnail preview on hover in the article list. 
+- [x] Notion-Style Tags with Tooltip
+Tags are styled like Notion, and hovering on a post in the list shows tags as speech-bubble tooltips.
+
 ## 🚀 Getting Started
 
 1. Create your blog repository:
