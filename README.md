@@ -42,8 +42,11 @@ This fork includes the following additional features:
 - [x] Notion-Style Tags with Tooltip
 - Tags are styled like Notion, and hovering on a post in the list shows tags as speech-bubble tooltips.
 - [x] Gallery
+- Allows users to collect and display posts with specific tags, with support for both table and grid views.
 - [x] Professional About Page Header
 - Enhanced About page with professional resume-style header, customizable professional avatar, title, and subtitle.
+- [x] Custom Page Cover Images
+- Support for defining custom banner images for different static pages.
 
 ## 🚀 Getting Started
 
