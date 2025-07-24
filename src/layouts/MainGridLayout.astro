@@ -125,7 +125,7 @@ const mainPanelTop = siteConfig.banner.enable
 
             <main id="swup-container" class="transition-swup-fade col-span-2 lg:col-span-1">
                 <!-- Page data for dynamic banner updates -->
-                <script id="page-banner-data" type="application/json" set:html={JSON.stringify({
+                <script is:inline id="page-banner-data" type="application/json" set:html={JSON.stringify({
                     bannerSrc: currentBanner,
                     isHomePage: isHomePage,
                     isUsingCustomBanner: isUsingCustomBanner,

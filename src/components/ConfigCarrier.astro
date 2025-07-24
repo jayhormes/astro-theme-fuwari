@@ -1,1 +1,8 @@
+---
 import { profileConfig, siteConfig } from "../config";
+---
+
+<script is:inline define:vars={{ profileConfig, siteConfig }}>
+  window.profileConfig = profileConfig;
+  window.siteConfig = siteConfig;
+</script>

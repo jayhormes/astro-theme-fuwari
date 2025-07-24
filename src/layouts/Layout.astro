@@ -670,7 +670,7 @@ if (window.swup) {
 </script>
 
 <!-- Professional mode configuration -->
-<script define:vars={{ isProfessionalModeEnabled: profileConfig.about?.enableProfessionalMode ?? false }}>
+<script is:inline define:vars={{ isProfessionalModeEnabled: profileConfig.about?.enableProfessionalMode ?? false }}>
 // Set global configuration for professional mode
 window.professionalModeConfig = isProfessionalModeEnabled;
 
