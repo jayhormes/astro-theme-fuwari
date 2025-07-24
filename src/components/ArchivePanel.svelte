@@ -184,7 +184,7 @@ onMount(async () => {
                                 </div>
                                 
                                 <!-- Tooltip that appears on post row hover -->
-                                <div class="tag-tooltip absolute bottom-full right-0 mb-2 p-2 bg-[var(--card-bg)] border border-[var(--line-divider)] rounded-lg shadow-lg z-[100] opacity-0 pointer-events-none transition-all duration-200 transform translate-y-1 min-w-[200px] max-w-[300px]">
+                                <div class="tag-tooltip absolute bottom-full right-0 mb-3 p-2 bg-[var(--card-bg)] border border-[var(--line-divider)] rounded-lg shadow-lg z-[100] opacity-0 pointer-events-none transition-all duration-200 transform translate-y-1 min-w-[200px] max-w-[300px]">
                                     <div class="flex flex-wrap gap-1">
                                         {#each post.data.tags as tag}
                                             <span 
