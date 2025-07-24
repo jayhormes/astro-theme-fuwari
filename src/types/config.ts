@@ -88,6 +88,10 @@ export type ProfileConfig = {
 		title?: string; // Professional title for About page
 		subtitle?: string; // Professional subtitle for About page
 		enableProfessionalMode?: boolean; // Enable professional mode (shows professional header + full width layout, hides sidebar)
+		badge?: {
+			enable?: boolean; // Enable/disable the professional badge
+			icon?: string; // Icon for the badge (e.g., "fa6-solid:briefcase")
+		};
 	};
 };
 

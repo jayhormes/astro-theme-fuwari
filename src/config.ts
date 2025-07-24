@@ -116,6 +116,19 @@ export const profileConfig: ProfileConfig = {
 		title: "Lorem Ipsum", // Professional title (optional, falls back to name)
 		subtitle: "Full Stack Developer & UI/UX Enthusiast", // Professional subtitle (optional, falls back to bio)
 		enableProfessionalMode: true, // Enable professional mode (shows professional header + full width layout, hides sidebar)
+		badge: {
+			enable: true, // Enable/disable the professional badge
+			icon: "fa6-solid:briefcase", // Icon for the badge (visit https://icones.js.org/ for icon codes)
+			// Alternative icons you can try:
+			// "fa6-solid:user-tie" - Professional user with tie
+			// "fa6-solid:graduation-cap" - Education/academic
+			// "fa6-solid:code" - Developer/programmer
+			// "fa6-solid:star" - Achievement/excellence
+			// "fa6-solid:certificate" - Certification
+			// "fa6-solid:award" - Award/recognition
+			// "fa6-solid:crown" - Premium/excellence
+			// "fa6-solid:gem" - Premium/luxury
+		},
 	},
 };
 

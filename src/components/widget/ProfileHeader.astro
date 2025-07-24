@@ -11,6 +11,11 @@ const avatarSrc = aboutConfig.avatar || config.avatar || "";
 const professionalTitle = aboutConfig.title || config.name;
 const professionalSubtitle = aboutConfig.subtitle || config.bio;
 const isProfessionalMode = aboutConfig.enableProfessionalMode ?? false;
+
+// Badge configuration
+const badgeConfig = aboutConfig.badge || {};
+const showBadge = badgeConfig.enable ?? true; // Default to show badge
+const badgeIcon = badgeConfig.icon || "fa6-solid:briefcase"; // Default icon
 ---
 
 <!-- Professional Resume Style Header -->
@@ -41,11 +46,13 @@ const isProfessionalMode = aboutConfig.enableProfessionalMode ?? false;
             />
           </div>
           <!-- Professional Badge -->
-          <div class={`absolute -bottom-2 -right-2 ${isProfessionalMode ? 'w-12 h-12' : 'w-8 h-8'} bg-[var(--primary)] rounded-full 
-                      flex items-center justify-center shadow-lg transform transition-all duration-300 
-                      group-hover:scale-110`}>
-            <Icon name="fa6-solid:briefcase" class={`text-white ${isProfessionalMode ? 'text-base' : 'text-sm'}`} />
-          </div>
+          {showBadge && (
+            <div class={`absolute -bottom-2 -right-2 ${isProfessionalMode ? 'w-12 h-12' : 'w-8 h-8'} bg-[var(--primary)] rounded-full 
+                        flex items-center justify-center shadow-lg transform transition-all duration-300 
+                        group-hover:scale-110`}>
+              <Icon name={badgeIcon} class={`text-white ${isProfessionalMode ? 'text-base' : 'text-sm'}`} />
+            </div>
+          )}
         </div>
         
         <!-- Professional Info -->
