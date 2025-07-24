@@ -1,0 +1,67 @@
+---
+import { getSupportedLanguages } from "../../config";
+import { getCollection } from "astro:content";
+import { siteConfig } from "../../config";
+import { i18n } from "../../i18n/translation";
+import I18nKey from "../../i18n/i18nKey";
+import MainGridLayout from "../../layouts/MainGridLayout.astro";
+
+export async function getStaticPaths() {
+    const supportedLanguages = getSupportedLanguages();
+    
+    return Object.keys(supportedLanguages)
+        .filter(lang => lang !== 'en') // Exclude 'en' because it uses the default route
+        .map(lang => ({
+            params: { lang }
+        }));
+}
+
+const { lang } = Astro.params;
+const currentLang = lang || 'en';
+
+const posts = await getCollection("posts");
+
+const title = i18n(I18nKey.projects, currentLang);
+
+// Filter for project posts (could be based on category or tags)
+const projectPosts = posts.filter(post => 
+    post.data.category === "Projects" || 
+    post.data.tags?.includes("project") ||
+    post.data.tags?.includes("Project")
+);
+---
+
+<MainGridLayout title={title} lang={currentLang} banner={siteConfig.pages?.projects?.src}>
+    <div class="onload-animation">
+        <div class="card-base">
+            <h1 class="text-2xl font-bold mb-6">{title}</h1>
+            
+            {projectPosts.length > 0 ? (
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {projectPosts.map((post) => (
+                        <a href={`/posts/${post.slug}/`} class="block">
+                            <div class="card-base hover:shadow-lg transition-shadow p-6">
+                                <h3 class="text-xl font-semibold mb-3">{post.data.title}</h3>
+                                <p class="text-gray-600 dark:text-gray-400 mb-4">{post.data.description}</p>
+                                <div class="flex flex-wrap gap-2">
+                                    {post.data.tags?.map((tag) => (
+                                        <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm">
+                                            {tag}
+                                        </span>
+                                    ))}
+                                </div>
+                                <div class="mt-4 text-sm text-gray-500">
+                                    {post.data.published?.toLocaleDateString()}
+                                </div>
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            ) : (
+                <div class="text-center py-12">
+                    <p class="text-gray-500">No projects found.</p>
+                </div>
+            )}
+        </div>
+    </div>
+</MainGridLayout>

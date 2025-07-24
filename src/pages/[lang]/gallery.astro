@@ -1,0 +1,87 @@
+---
+import { getSupportedLanguages } from "../../config";
+import { getCollection } from "astro:content";
+import ImageWrapper from "../../components/misc/ImageWrapper.astro";
+import { siteConfig } from "../../config";
+import { i18n } from "../../i18n/translation";
+import I18nKey from "../../i18n/i18nKey";
+import MainGridLayout from "../../layouts/MainGridLayout.astro";
+
+export async function getStaticPaths() {
+    const supportedLanguages = getSupportedLanguages();
+    
+    return Object.keys(supportedLanguages)
+        .filter(lang => lang !== 'en') // Exclude 'en' because it uses the default route
+        .map(lang => ({
+            params: { lang }
+        }));
+}
+
+const { lang } = Astro.params;
+const currentLang = lang || 'en';
+
+const posts = await getCollection("posts");
+
+const title = i18n(I18nKey.gallery, currentLang);
+
+// Group posts by collection from gallery config
+const collections = siteConfig.gallery?.collections || [];
+---
+
+<MainGridLayout title={title} lang={currentLang} banner={siteConfig.pages?.gallery?.src}>
+    <div class="onload-animation">
+        <div class="card-base">
+            <h1 class="text-2xl font-bold mb-6">{title}</h1>
+            
+            {collections.map((collection) => {
+                const collectionPosts = posts.filter(post => 
+                    collection.tags.some(tag => 
+                        post.data.tags?.includes(tag)
+                    )
+                );
+                
+                if (collectionPosts.length === 0) return null;
+                
+                return (
+                    <div class="mb-8">
+                        <h2 class="text-xl font-semibold mb-4">{collection.name}</h2>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">{collection.description}</p>
+                        
+                        {collection.displayMode === "table" ? (
+                            <div class="space-y-2">
+                                {collectionPosts.map((post) => (
+                                    <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
+                                        <a href={`/posts/${post.slug}/`} class="text-blue-600 dark:text-blue-400 hover:underline">
+                                            {post.data.title}
+                                        </a>
+                                        <span class="text-sm text-gray-500">{post.data.published?.toLocaleDateString()}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {collectionPosts.map((post) => (
+                                    <a href={`/posts/${post.slug}/`} class="block">
+                                        <div class="card-base hover:shadow-lg transition-shadow">
+                                            {post.data.image && (
+                                                <ImageWrapper 
+                                                    src={post.data.image} 
+                                                    alt={post.data.title}
+                                                    class="w-full h-48 object-cover rounded-t-lg"
+                                                />
+                                            )}
+                                            <div class="p-4">
+                                                <h3 class="font-semibold mb-2">{post.data.title}</h3>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400">{post.data.description}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                );
+            })}
+        </div>
+    </div>
+</MainGridLayout>

@@ -1,29 +1,53 @@
 ---
 import { getSupportedLanguages } from "../config";
-import Layout from "../layouts/Layout.astro";
+import Pagination from "../components/control/Pagination.astro";
+import PostPage from "../components/PostPage.astro";
+import { PAGE_SIZE } from "../constants/constants";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+import { getSortedPosts } from "../utils/content-utils";
 import { i18n } from "../i18n/translation";
 import I18nKey from "../i18n/i18nKey";
 
 export async function getStaticPaths() {
     const supportedLanguages = getSupportedLanguages();
+    const allBlogPosts = await getSortedPosts();
+    
     return Object.keys(supportedLanguages)
         .filter(lang => lang !== 'en') // Exclude 'en' because it's the default route
         .map(lang => ({
-            params: { lang }
+            params: { lang },
+            props: {
+                // For now, show the same posts for all languages
+                // Later we can filter posts by language if needed
+                page: {
+                    data: allBlogPosts.slice(0, PAGE_SIZE),
+                    url: {
+                        current: `/${lang}/`,
+                        prev: undefined,
+                        next: allBlogPosts.length > PAGE_SIZE ? `/${lang}/2/` : undefined,
+                    },
+                    currentPage: 1,
+                    lastPage: Math.ceil(allBlogPosts.length / PAGE_SIZE),
+                    size: PAGE_SIZE,
+                    total: allBlogPosts.length,
+                    start: 0,
+                    end: Math.min(PAGE_SIZE - 1, allBlogPosts.length - 1),
+                }
+            }
         }));
 }
 
 const supportedLanguages = getSupportedLanguages();
-
 const { lang } = Astro.params;
+const { page } = Astro.props;
 
 // Set the current language for i18n functions
 const currentLang = lang || 'en';
+
+const len = page.data.length;
 ---
 
-<Layout title={i18n(I18nKey.home)} lang={currentLang}>
-    <main>
-        <h1>{i18n(I18nKey.home)}</h1>
-        <p>Welcome to the {supportedLanguages[currentLang].name} version of the site!</p>
-    </main>
-</Layout>
+<MainGridLayout title={i18n(I18nKey.home)} lang={currentLang}>
+    <PostPage page={page}></PostPage>
+    <Pagination class="mx-auto onload-animation" page={page} style={`animation-delay: calc(var(--content-delay) + ${(len)*50}ms)`}></Pagination>
+</MainGridLayout>

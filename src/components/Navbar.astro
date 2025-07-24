@@ -1,9 +1,10 @@
 ---
 import { Icon } from "astro-icon/components";
 import { navBarConfig, siteConfig } from "../config";
-import { LinkPresets } from "../constants/link-presets";
+import { getLinkPresets } from "../constants/link-presets";
 import { LinkPreset, type NavBarLink } from "../types/config";
 import { url } from "../utils/url-utils";
+import { getLanguageFromPath } from "../utils/language-utils";
 import LightDarkSwitch from "./LightDarkSwitch.svelte";
 import Search from "./Search.svelte";
 import LanguageSelector from "./LanguageSelector.astro";
@@ -12,12 +13,31 @@ import NavMenuPanel from "./widget/NavMenuPanel.astro";
 
 const className = Astro.props.class;
 
+// Get current language from URL
+const currentLang = getLanguageFromPath(Astro.url.pathname);
+const LinkPresets = getLinkPresets(currentLang);
+
+// Helper function to create language-aware URLs
+const createLanguageUrl = (path: string) => {
+    if (currentLang === 'en') {
+        return url(path);
+    }
+    return url(`/${currentLang}${path}`);
+};
+
 let links: NavBarLink[] = navBarConfig.links.map(
 	(item: NavBarLink | LinkPreset): NavBarLink => {
 		if (typeof item === "number") {
-			return LinkPresets[item];
+			const preset = LinkPresets[item];
+			return {
+				...preset,
+				url: createLanguageUrl(preset.url)
+			};
 		}
-		return item;
+		return {
+			...item,
+			url: item.external ? item.url : createLanguageUrl(item.url)
+		};
 	},
 );
 ---
@@ -34,7 +54,7 @@ let links: NavBarLink[] = navBarConfig.links.map(
         </a>
         <div class="hidden md:flex">
             {links.map((l) => {
-                return <a aria-label={l.name} href={l.external ? l.url : url(l.url)} target={l.external ? "_blank" : null}
+                return <a aria-label={l.name} href={l.url} target={l.external ? "_blank" : null}
                           class="btn-plain scale-animation rounded-lg h-11 font-bold px-5 active:scale-95"
                 >
                     <div class="flex items-center">
