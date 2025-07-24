@@ -7,6 +7,31 @@ import type {
 } from "./types/config";
 import { LinkPreset } from "./types/config";
 
+// All available languages in the i18n system
+export const availableLanguages = {
+	en: { code: "en", name: "English", flag: "🇺🇸" },
+	"zh-tw": { code: "zh_TW", name: "繁體中文", flag: "🇹🇼" },
+	"zh-cn": { code: "zh_CN", name: "简体中文", flag: "🇨🇳" },
+	ja: { code: "ja", name: "日本語", flag: "🇯🇵" },
+	ko: { code: "ko", name: "한국어", flag: "🇰🇷" },
+	es: { code: "es", name: "Español", flag: "🇪🇸" },
+	th: { code: "th", name: "ไทย", flag: "🇹🇭" },
+} as const;
+
+export type AvailableLanguage = keyof typeof availableLanguages;
+
+// User-configurable languages - modify this array to enable/disable languages
+export const enabledLanguages: AvailableLanguage[] = ["en", "zh-tw", "zh-cn", "ja"];
+
+// Helper function to get supported languages based on user configuration
+export const getSupportedLanguages = () => {
+	return Object.fromEntries(
+		enabledLanguages.map(lang => [lang, availableLanguages[lang]])
+	) as Record<AvailableLanguage, typeof availableLanguages[AvailableLanguage]>;
+};
+
+export type SupportedLanguage = typeof enabledLanguages[number];
+
 export const siteConfig: SiteConfig = {
 	title: "Fuwari",
 	subtitle: "Demo Site",

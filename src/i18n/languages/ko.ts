@@ -37,4 +37,14 @@ export const ko: Translation = {
 	[Key.author]: "저자",
 	[Key.publishedAt]: "게시일",
 	[Key.license]: "라이선스",
+
+	// Language selector
+	[Key.languageSelector]: "언어",
+	[Key.english]: "English",
+	[Key.chineseSimplified]: "简体中文",
+	[Key.chineseTraditional]: "繁體中文",
+	[Key.japanese]: "日本語",
+	[Key.korean]: "한국어",
+	[Key.spanish]: "Español",
+	[Key.thai]: "ไทย",
 };

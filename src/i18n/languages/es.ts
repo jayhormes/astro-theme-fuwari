@@ -37,4 +37,14 @@ export const es: Translation = {
 	[Key.author]: "Autor",
 	[Key.publishedAt]: "Publicado el",
 	[Key.license]: "Licencia",
+
+	// Language selector
+	[Key.languageSelector]: "Idioma",
+	[Key.english]: "English",
+	[Key.chineseSimplified]: "简体中文",
+	[Key.chineseTraditional]: "繁體中文",
+	[Key.japanese]: "日本語",
+	[Key.korean]: "한국어",
+	[Key.spanish]: "Español",
+	[Key.thai]: "ไทย",
 };

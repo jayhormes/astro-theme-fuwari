@@ -37,4 +37,14 @@ export const zh_TW: Translation = {
 	[Key.author]: "作者",
 	[Key.publishedAt]: "發佈於",
 	[Key.license]: "許可協議",
+
+	// Language selector
+	[Key.languageSelector]: "語言",
+	[Key.english]: "English",
+	[Key.chineseSimplified]: "简体中文",
+	[Key.chineseTraditional]: "繁體中文",
+	[Key.japanese]: "日本語",
+	[Key.korean]: "한국어",
+	[Key.spanish]: "Español",
+	[Key.thai]: "ไทย",
 };

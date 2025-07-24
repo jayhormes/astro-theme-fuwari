@@ -37,4 +37,14 @@ export const ja: Translation = {
 	[Key.author]: "作者",
 	[Key.publishedAt]: "公開日",
 	[Key.license]: "ライセンス",
+
+	// Language selector
+	[Key.languageSelector]: "言語",
+	[Key.english]: "English",
+	[Key.chineseSimplified]: "简体中文",
+	[Key.chineseTraditional]: "繁體中文",
+	[Key.japanese]: "日本語",
+	[Key.korean]: "한국어",
+	[Key.spanish]: "Español",
+	[Key.thai]: "ไทย",
 };

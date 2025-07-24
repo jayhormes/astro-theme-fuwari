@@ -37,4 +37,14 @@ export const th: Translation = {
 	[Key.author]: "ผู้เขียน",
 	[Key.publishedAt]: "เผยแพร่เมื่อ",
 	[Key.license]: "สัญญาอนุญาต",
+
+	// Language selector
+	[Key.languageSelector]: "ภาษา",
+	[Key.english]: "English",
+	[Key.chineseSimplified]: "简体中文",
+	[Key.chineseTraditional]: "繁體中文",
+	[Key.japanese]: "日本語",
+	[Key.korean]: "한국어",
+	[Key.spanish]: "Español",
+	[Key.thai]: "ไทย",
 };

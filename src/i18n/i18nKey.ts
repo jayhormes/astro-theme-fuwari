@@ -34,6 +34,16 @@ enum I18nKey {
 	author = "author",
 	publishedAt = "publishedAt",
 	license = "license",
+
+	// Language selector
+	languageSelector = "languageSelector",
+	english = "english",
+	chineseSimplified = "chineseSimplified",
+	chineseTraditional = "chineseTraditional",
+	japanese = "japanese",
+	korean = "korean",
+	spanish = "spanish",
+	thai = "thai",
 }
 
 export default I18nKey;

@@ -1,0 +1,29 @@
+---
+import { getSupportedLanguages } from "../config";
+import Layout from "../layouts/Layout.astro";
+import { i18n } from "../i18n/translation";
+import I18nKey from "../i18n/i18nKey";
+
+export async function getStaticPaths() {
+    const supportedLanguages = getSupportedLanguages();
+    return Object.keys(supportedLanguages)
+        .filter(lang => lang !== 'en') // Exclude 'en' because it's the default route
+        .map(lang => ({
+            params: { lang }
+        }));
+}
+
+const supportedLanguages = getSupportedLanguages();
+
+const { lang } = Astro.params;
+
+// Set the current language for i18n functions
+const currentLang = lang || 'en';
+---
+
+<Layout title={i18n(I18nKey.home)} lang={currentLang}>
+    <main>
+        <h1>{i18n(I18nKey.home)}</h1>
+        <p>Welcome to the {supportedLanguages[currentLang].name} version of the site!</p>
+    </main>
+</Layout>
