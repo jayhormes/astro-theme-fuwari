@@ -42,6 +42,8 @@ This fork includes the following additional features:
 - [x] Notion-Style Tags with Tooltip
 - Tags are styled like Notion, and hovering on a post in the list shows tags as speech-bubble tooltips.
 - [x] Gallery
+- [x] Professional About Page Header
+- Enhanced About page with professional resume-style header, customizable professional avatar, title, and subtitle.
 
 ## 🚀 Getting Started
 
@@ -75,6 +77,31 @@ draft: false
 lang: jp      # Set only if the post's language differs from the site's language in `config.ts`
 ---
 ```
+
+## 🎨 Professional About Page Configuration
+
+You can customize the About page to display a professional resume-style header by configuring the `about` section in `src/config.ts`:
+
+```typescript
+export const profileConfig: ProfileConfig = {
+  // ... existing configuration
+  about: {
+    avatar: "assets/images/professional-avatar.png", // Optional: Professional avatar for About page
+    title: "Your Professional Title", // Optional: Professional title (defaults to name)
+    subtitle: "Full Stack Developer & UI/UX Enthusiast", // Optional: Professional subtitle (defaults to bio)
+    enableProfessionalMode: true, // Enable professional mode (shows professional header + full width layout, hides sidebar)
+  },
+};
+```
+
+### About Page Features:
+- **Professional Avatar**: Use a different, more professional avatar for the About page
+- **Custom Title & Subtitle**: Override the default name and bio with professional titles
+- **Professional Mode**: Single toggle for complete professional layout (professional header + full-width layout + hidden sidebar)
+- **Responsive Design**: Optimized for both desktop and mobile viewing
+- **Professional Links**: Styled social/professional links with hover effects
+
+If you don't configure the `about` section, the About page will use the default profile information.
 
 ## 🧩 Markdown Extended Syntax
 

@@ -110,6 +110,13 @@ export const profileConfig: ProfileConfig = {
 			url: "https://github.com/saicaca/fuwari",
 		},
 	],
+	about: {
+		// Professional configuration for About page
+		avatar: "assets/images/demo-avatar.png", // Professional avatar (optional, falls back to main avatar)
+		title: "Lorem Ipsum", // Professional title (optional, falls back to name)
+		subtitle: "Full Stack Developer & UI/UX Enthusiast", // Professional subtitle (optional, falls back to bio)
+		enableProfessionalMode: true, // Enable professional mode (shows professional header + full width layout, hides sidebar)
+	},
 };
 
 export const licenseConfig: LicenseConfig = {

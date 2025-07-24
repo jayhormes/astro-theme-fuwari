@@ -83,6 +83,12 @@ export type ProfileConfig = {
 		url: string;
 		icon: string;
 	}[];
+	about?: {
+		avatar?: string; // Professional avatar for About page
+		title?: string; // Professional title for About page
+		subtitle?: string; // Professional subtitle for About page
+		enableProfessionalMode?: boolean; // Enable professional mode (shows professional header + full width layout, hides sidebar)
+	};
 };
 
 export type LicenseConfig = {
