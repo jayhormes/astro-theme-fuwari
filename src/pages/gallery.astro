@@ -79,34 +79,38 @@ function getPostUrl(slug: string) {
                                     </thead>
                                     <tbody>
                                         {collection.posts.map(post => (
-                                            <tr class="group border-b border-[var(--line-divider)] hover:bg-[var(--btn-plain-bg-hover)] transition-all duration-300 ease-in-out">
+                                            <tr 
+                                                class="group border-b border-[var(--line-divider)] hover:bg-[var(--btn-plain-bg-hover)] transition-colors duration-200 cursor-pointer hover:border-[var(--primary)] hover:border-opacity-30"
+                                                onclick={`window.location.href='${getPostUrl(post.slug)}'`}
+                                                role="button"
+                                                tabindex="0"
+                                                onkeydown={`if(event.key==='Enter'||event.key===' '){window.location.href='${getPostUrl(post.slug)}'}`}
+                                                aria-label={`View post: ${post.data.title}`}
+                                            >
                                                 <td class="py-3 px-4">
                                                     {post.data.image ? (
                                                         <img 
                                                             src={post.data.image} 
                                                             alt={post.data.title}
-                                                            class="w-16 h-16 object-cover rounded-lg transition-all duration-300 group-hover:shadow-lg"
+                                                            class="w-16 h-16 object-cover rounded-lg"
                                                         />
                                                     ) : (
-                                                        <div class="w-16 h-16 bg-[var(--line-divider)] rounded-lg flex items-center justify-center transition-all duration-300 group-hover:bg-[var(--primary)] group-hover:bg-opacity-20">
-                                                            <span class="text-xs text-neutral-500 dark:text-neutral-400 group-hover:text-[var(--primary)]">No Image</span>
+                                                        <div class="w-16 h-16 bg-[var(--line-divider)] rounded-lg flex items-center justify-center transition-colors duration-200 group-hover:bg-[var(--primary)] group-hover:bg-opacity-20">
+                                                            <span class="text-xs text-neutral-500 dark:text-neutral-400 group-hover:text-[var(--primary)] transition-colors duration-200">No Image</span>
                                                         </div>
                                                     )}
                                                 </td>
                                                 <td class="py-3 px-4">
-                                                    <a 
-                                                        href={getPostUrl(post.slug)} 
-                                                        class="font-medium text-neutral-900 dark:text-neutral-100 hover:text-[var(--primary)] transition-all duration-300 group-hover:translate-x-1"
-                                                    >
+                                                    <h3 class="font-medium text-neutral-900 dark:text-neutral-100 transition-colors duration-200 group-hover:text-[var(--primary)]">
                                                         {post.data.title}
-                                                    </a>
+                                                    </h3>
                                                     {post.data.description && (
-                                                        <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1 transition-all duration-300 group-hover:text-neutral-700 dark:group-hover:text-neutral-300">
+                                                        <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1 transition-colors duration-200 group-hover:text-neutral-700 dark:group-hover:text-neutral-300">
                                                             {post.data.description}
                                                         </p>
                                                     )}
                                                 </td>
-                                                <td class="py-3 px-4 text-sm text-neutral-500 dark:text-neutral-400 transition-all duration-300 group-hover:text-[var(--primary)]">
+                                                <td class="py-3 px-4 text-sm text-neutral-500 dark:text-neutral-400 transition-colors duration-200 group-hover:text-[var(--primary)]">
                                                     {formatDate(post.data.published)}
                                                 </td>
                                             </tr>
@@ -118,7 +122,11 @@ function getPostUrl(slug: string) {
                             <!-- Grid View -->
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {collection.posts.map(post => (
-                                    <div class="group bg-[var(--card-bg)] rounded-lg border border-[var(--line-divider)] overflow-hidden hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/30 transition-all duration-300 ease-in-out hover:scale-105 hover:border-[var(--primary)] hover:border-opacity-50">
+                                    <a 
+                                        href={getPostUrl(post.slug)} 
+                                        class="group bg-[var(--card-bg)] rounded-lg border border-[var(--line-divider)] overflow-hidden hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/30 transition-all duration-300 ease-in-out hover:scale-105 hover:border-[var(--primary)] hover:border-opacity-50 block"
+                                        aria-label={post.data.title}
+                                    >
                                         {post.data.image ? (
                                             <img 
                                                 src={post.data.image} 
@@ -131,13 +139,8 @@ function getPostUrl(slug: string) {
                                             </div>
                                         )}
                                         <div class="p-4">
-                                            <h3 class="font-semibold mb-2">
-                                                <a 
-                                                    href={getPostUrl(post.slug)} 
-                                                    class="text-neutral-900 dark:text-neutral-100 hover:text-[var(--primary)] transition-all duration-300 group-hover:text-[var(--primary)]"
-                                                >
-                                                    {post.data.title}
-                                                </a>
+                                            <h3 class="font-semibold mb-2 text-neutral-900 dark:text-neutral-100 transition-all duration-300 group-hover:text-[var(--primary)]">
+                                                {post.data.title}
                                             </h3>
                                             {post.data.description && (
                                                 <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-3 transition-all duration-300 group-hover:text-neutral-700 dark:group-hover:text-neutral-300">
@@ -150,7 +153,7 @@ function getPostUrl(slug: string) {
                                                 </span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 ))}
                             </div>
                         )
