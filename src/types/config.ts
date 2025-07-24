@@ -35,6 +35,12 @@ export type SiteConfig = {
 			textAlign?: string;
 		};
 	};
+	pages: {
+		archive?: PageBannerConfig;
+		gallery?: PageBannerConfig;
+		projects?: PageBannerConfig;
+		about?: PageBannerConfig;
+	};
 	toc: {
 		enable: boolean;
 		depth: 1 | 2 | 3;
@@ -47,6 +53,11 @@ export type Favicon = {
 	src: string;
 	theme?: "light" | "dark";
 	sizes?: string;
+};
+
+export type PageBannerConfig = {
+	src: string;
+	position?: "top" | "center" | "bottom";
 };
 
 export type GalleryCollection = {

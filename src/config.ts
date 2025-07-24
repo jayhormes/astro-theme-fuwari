@@ -58,6 +58,24 @@ export const siteConfig: SiteConfig = {
 			textAlign: "center",
 		},
 	},
+	pages: {
+		archive: {
+			src: "/demo-banner.png", // Custom banner for Archive page - you can change this to any image path
+			position: "center",
+		},
+		gallery: {
+			src: "/guide-cover.jpeg", // Custom banner for Gallery page - you can change this to any image path
+			position: "center",
+		},
+		projects: {
+			src: "/demo-banner.png", // Custom banner for Projects page - you can change this to any image path
+			position: "center",
+		},
+		about: {
+			src: "/guide-cover.jpeg", // Custom banner for About page - you can change this to any image path
+			position: "center",
+		},
+	},
 	toc: {
 		enable: true, // Display the table of contents on the right side of the post
 		depth: 2, // Maximum heading depth to show in the table, from 1 to 3
