@@ -1,4 +1,5 @@
 import { getSupportedLanguages, type SupportedLanguage } from "../config";
+import { getSiteDefaultLanguage } from "./site-language-utils";
 
 const supportedLanguages = getSupportedLanguages();
 
@@ -13,7 +14,7 @@ export function getLanguageFromPath(path: string): SupportedLanguage {
         return firstSegment as SupportedLanguage;
     }
     
-    return 'en'; // default language
+    return getSiteDefaultLanguage(); // Use site's configured default language
 }
 
 /**
@@ -22,9 +23,12 @@ export function getLanguageFromPath(path: string): SupportedLanguage {
 export function removeLanguageFromPath(path: string): string {
     const segments = path.split('/').filter(Boolean);
     const firstSegment = segments[0];
+    const hasTrailingSlash = path.endsWith('/');
     
     if (firstSegment && Object.keys(supportedLanguages).includes(firstSegment)) {
-        return '/' + segments.slice(1).join('/');
+        const resultPath = '/' + segments.slice(1).join('/');
+        // Preserve trailing slash if original had one and result isn't just root
+        return resultPath === '/' ? '/' : (hasTrailingSlash ? resultPath + '/' : resultPath);
     }
     
     return path;
@@ -35,8 +39,9 @@ export function removeLanguageFromPath(path: string): string {
  */
 export function addLanguageToPath(path: string, lang: SupportedLanguage): string {
     const cleanPath = removeLanguageFromPath(path);
+    const defaultLang = getSiteDefaultLanguage();
     
-    if (lang === 'en') {
+    if (lang === defaultLang) {
         return cleanPath;
     }
     

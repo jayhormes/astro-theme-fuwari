@@ -38,9 +38,43 @@ export function getTranslation(lang: string): Translation {
 }
 
 export function i18n(key: I18nKey, lang?: string): string {
-	// If lang is provided, use it; otherwise try to get from current path or fall back to site config
-	const currentLang = lang || 
-		(typeof window !== 'undefined' ? getLanguageFromPath(window.location.pathname) : null) ||
-		siteConfig.lang;
+	// If lang is provided, use it directly
+	if (lang) {
+		return getTranslation(lang)[key];
+	}
+	
+	// Try to get language from current path
+	let currentLang = null;
+	if (typeof window !== 'undefined') {
+		currentLang = getLanguageFromPath(window.location.pathname);
+		
+		// Special case: if we're on root path and siteConfig is not 'en', 
+		// use the site's configured language instead of defaulting to 'en'
+		if (window.location.pathname === '/' && siteConfig.lang !== 'en') {
+			// Convert siteConfig lang format to URL format
+			const langMap: Record<string, string> = {
+				'zh_TW': 'zh-tw',
+				'zh_CN': 'zh-cn',
+				'ja': 'ja',
+				'ko': 'ko',
+				'es': 'es',
+				'th': 'th'
+			};
+			currentLang = langMap[siteConfig.lang] || currentLang;
+		}
+	} else {
+		// Server-side: use siteConfig and convert to URL format
+		const langMap: Record<string, string> = {
+			'zh_TW': 'zh-tw',
+			'zh_CN': 'zh-cn',
+			'ja': 'ja',
+			'ko': 'ko',
+			'es': 'es',
+			'th': 'th',
+			'en': 'en'
+		};
+		currentLang = langMap[siteConfig.lang] || 'en';
+	}
+	
 	return getTranslation(currentLang)[key];
 }

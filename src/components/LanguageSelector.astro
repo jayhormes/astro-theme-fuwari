@@ -3,29 +3,25 @@ import { Icon } from "astro-icon/components";
 import { getSupportedLanguages } from "../config";
 import { i18n } from "../i18n/translation";
 import I18nKey from "../i18n/i18nKey";
+import { getSiteDefaultLanguage, getLanguageUrl } from "../utils/site-language-utils";
+import { getLanguageFromPath, removeLanguageFromPath } from "../utils/language-utils";
 
 const supportedLanguages = getSupportedLanguages();
+const defaultLang = getSiteDefaultLanguage();
 
-// Get current language from URL
+// Get current language from URL using standardized function
 const currentPath = Astro.url.pathname;
-const pathSegments = currentPath.split('/').filter(Boolean);
-const currentLang = pathSegments[0] && Object.keys(supportedLanguages).includes(pathSegments[0]) 
-    ? pathSegments[0] 
-    : 'en';
+const currentLang = getLanguageFromPath(currentPath);
 
 // Get the path without language prefix for URL construction
-const getPathWithoutLang = (path: string) => {
-    const segments = path.split('/').filter(Boolean);
-    const firstSegment = segments[0];
-    
-    // Check if first segment is a language code
-    if (Object.keys(supportedLanguages).includes(firstSegment)) {
-        return '/' + segments.slice(1).join('/');
-    }
-    return path;
-};
+const basePath = removeLanguageFromPath(currentPath);
 
-const basePath = getPathWithoutLang(currentPath);
+// Debug logging
+console.log('LanguageSelector Debug:', {
+    currentPath,
+    currentLang,
+    basePath
+});
 ---
 
 <div class="relative group">
@@ -43,11 +39,23 @@ const basePath = getPathWithoutLang(currentPath);
     >
         {Object.entries(supportedLanguages).map(([langKey, langInfo]) => {
             const isActive = currentLang === langKey;
-            const href = langKey === 'en' ? basePath : `/${langKey}${basePath}`;
+            // Use the utility function to generate correct URL
+            const href = getLanguageUrl(langKey, basePath);
+            
+            // Debug URL generation
+            console.log(`Generating URL for ${langKey}:`, {
+                langKey,
+                basePath,
+                href,
+                isActive
+            });
             
             return (
                 <a
                     href={href}
+                    data-target-lang={langKey}
+                    data-base-path={basePath}
+                    data-href={href}
                     class={`flex items-center px-3 py-2 rounded-md transition-colors ${
                         isActive 
                             ? 'bg-[var(--primary)] text-white' 
@@ -96,6 +104,32 @@ const basePath = getPathWithoutLang(currentPath);
                 dropdown.classList.add('opacity-0', 'invisible');
                 dropdown.classList.remove('opacity-100', 'visible');
             }
+        });
+        
+        // Add click handlers to language links to force page reload
+        const languageLinks = dropdown.querySelectorAll('a[href]');
+        languageLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Get the target URL and navigate there with full page reload
+                const href = (link as HTMLAnchorElement).href;
+                const targetLang = link.getAttribute('data-target-lang');
+                
+                console.log(`🌐 Language switch: ${targetLang} -> ${href}`);
+                console.log('Current URL:', window.location.href);
+                console.log('Target URL:', href);
+                
+                // Prevent default click behavior
+                e.preventDefault();
+                
+                // Force navigation with full page reload
+                try {
+                    window.location.href = href;
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    // Fallback to replace if href assignment fails
+                    window.location.replace(href);
+                }
+            });
         });
         
         // Close dropdown when clicking outside

@@ -5,6 +5,7 @@ import { getLinkPresets } from "../constants/link-presets";
 import { LinkPreset, type NavBarLink } from "../types/config";
 import { url } from "../utils/url-utils";
 import { getLanguageFromPath } from "../utils/language-utils";
+import { getSiteDefaultLanguage } from "../utils/site-language-utils";
 import LightDarkSwitch from "./LightDarkSwitch.svelte";
 import Search from "./Search.svelte";
 import LanguageSelector from "./LanguageSelector.astro";
@@ -16,10 +17,11 @@ const className = Astro.props.class;
 // Get current language from URL
 const currentLang = getLanguageFromPath(Astro.url.pathname);
 const LinkPresets = getLinkPresets(currentLang);
+const defaultLang = getSiteDefaultLanguage();
 
-// Helper function to create language-aware URLs
+// Helper function to create language-aware URLs for non-preset links
 const createLanguageUrl = (path: string) => {
-    if (currentLang === 'en') {
+    if (currentLang === defaultLang) {
         return url(path);
     }
     return url(`/${currentLang}${path}`);
@@ -28,11 +30,8 @@ const createLanguageUrl = (path: string) => {
 let links: NavBarLink[] = navBarConfig.links.map(
 	(item: NavBarLink | LinkPreset): NavBarLink => {
 		if (typeof item === "number") {
-			const preset = LinkPresets[item];
-			return {
-				...preset,
-				url: createLanguageUrl(preset.url)
-			};
+			// For presets, use the URL directly as it's already language-aware
+			return LinkPresets[item];
 		}
 		return {
 			...item,
@@ -46,7 +45,7 @@ let links: NavBarLink[] = navBarConfig.links.map(
     <div class:list={[
         className,
         "card-base !overflow-visible max-w-[var(--page-width)] h-[4.5rem] !rounded-t-none mx-auto flex items-center justify-between px-4"]}>
-        <a href={url('/')} class="btn-plain scale-animation rounded-lg h-[3.25rem] px-5 font-bold active:scale-95">
+        <a href={LinkPresets[LinkPreset.Home].url} class="btn-plain scale-animation rounded-lg h-[3.25rem] px-5 font-bold active:scale-95">
             <div class="flex flex-row text-[var(--primary)] items-center text-md">
                 <Icon name="material-symbols:home-outline-rounded" class="text-[1.75rem] mb-1 mr-2" />
                 {siteConfig.title}

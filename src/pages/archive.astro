@@ -5,11 +5,15 @@ import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { siteConfig } from "../config";
 import { getSortedPosts } from "../utils/content-utils";
+import { getSiteDefaultLanguage } from "../utils/site-language-utils";
+
+// For root pages, use the site's configured default language
+const currentLang = getSiteDefaultLanguage();
 
 const posts = await getSortedPosts();
 ---
 
-<MainGridLayout title={i18n(I18nKey.archive)} banner={siteConfig.pages?.archive?.src}>
+<MainGridLayout title={i18n(I18nKey.archive, currentLang)} banner={siteConfig.pages?.archive?.src} lang={currentLang}>
     <div class="onload-animation">
         <div class="card-base rounded-[var(--radius-large)] overflow-hidden">
             <div class="relative w-full">
