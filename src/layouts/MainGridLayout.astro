@@ -8,13 +8,14 @@ import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 import ImageWrapper from "../components/misc/ImageWrapper.astro";
 import TOC from "../components/widget/TOC.astro";
-import { siteConfig } from "../config";
+import { siteConfig, getSupportedLanguages } from "../config";
 import {
 	BANNER_HEIGHT,
 	BANNER_HEIGHT_EXTEND,
 	MAIN_PANEL_OVERLAPS_BANNER_HEIGHT,
 } from "../constants/constants";
 import { pathsEqual, url } from "../utils/url-utils";
+import { getSiteDefaultLanguage } from "../utils/site-language-utils";
 import Layout from "./Layout.astro";
 
 interface Props {
@@ -38,8 +39,31 @@ const hasBannerCredit =
 	siteConfig.banner.enable && siteConfig.banner.credit.enable;
 const hasBannerLink = !!siteConfig.banner.credit.url;
 
-// Check if current page is home page
-const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
+// Check if current page is home page (including language-specific home pages)
+function isHomePageCheck(pathname: string): boolean {
+	// Check if it's the root home page
+	if (pathsEqual(pathname, url("/"))) {
+		return true;
+	}
+	
+	// Check if it's a language-specific home page (e.g., /zh-tw/, /ja/)
+	const supportedLanguages = getSupportedLanguages();
+	const defaultLang = getSiteDefaultLanguage();
+	
+	for (const lang of Object.keys(supportedLanguages)) {
+		// Skip default language as it uses root path
+		if (lang === defaultLang) continue;
+		
+		// Check if pathname matches language home page
+		if (pathsEqual(pathname, url(`/${lang}/`))) {
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+const isHomePage = isHomePageCheck(Astro.url.pathname);
 
 // Determine which banner to use
 const currentBanner = banner || siteConfig.banner.src;
