@@ -4,8 +4,12 @@ import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { getSortedPostsList } from "../utils/content-utils";
+import { getSiteDefaultLanguage } from "../utils/site-language-utils";
+import ImageWrapper from "../components/misc/ImageWrapper.astro";
 
-const sortedPostsList = await getSortedPostsList();
+// Use the site's default language for the root /gallery page
+const defaultLang = getSiteDefaultLanguage();
+const sortedPostsList = await getSortedPostsList(defaultLang);
 const galleryCollections = siteConfig.gallery?.collections || [];
 
 // Filter posts for each collection

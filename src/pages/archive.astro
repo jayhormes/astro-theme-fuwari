@@ -10,7 +10,7 @@ import { getSiteDefaultLanguage } from "../utils/site-language-utils";
 // For root pages, use the site's configured default language
 const currentLang = getSiteDefaultLanguage();
 
-const posts = await getSortedPosts();
+const posts = await getSortedPosts(currentLang);
 ---
 
 <MainGridLayout title={i18n(I18nKey.archive, currentLang)} banner={siteConfig.pages?.archive?.src} lang={currentLang}>

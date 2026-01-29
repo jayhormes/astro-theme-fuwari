@@ -1,8 +1,9 @@
 ---
 import { getSupportedLanguages } from "../../config";
-import { getEntry, render } from "astro:content";
+import { render } from "astro:content";
 import Markdown from "../../components/misc/Markdown.astro";
 import { siteConfig } from "../../config";
+import { getSpecByLangAndName } from "../../utils/spec-utils";
 import I18nKey from "../../i18n/i18nKey";
 import { i18n } from "../../i18n/translation";
 import MainGridLayout from "../../layouts/MainGridLayout.astro";
@@ -22,7 +23,7 @@ export async function getStaticPaths() {
 const { lang } = Astro.params;
 const currentLang = lang || getSiteDefaultLanguage();
 
-const projectsPost = await getEntry("spec", "projects");
+const projectsPost = await getSpecByLangAndName("projects", currentLang);
 
 if (!projectsPost) {
 	throw new Error("Projects page content not found");

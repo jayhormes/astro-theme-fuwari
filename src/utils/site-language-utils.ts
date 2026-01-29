@@ -2,11 +2,11 @@ import { siteConfig } from "../config";
 import type { SupportedLanguage } from "../config";
 
 /**
- * Get the default language key from siteConfig
- * Maps siteConfig.lang (like 'zh_TW') to URL key (like 'zh-tw')
+ * Normalize language code to URL format
+ * e.g., zh_TW -> zh-tw, zh_CN -> zh-cn
  */
-export function getSiteDefaultLanguage(): SupportedLanguage {
-    const langMap: Record<string, SupportedLanguage> = {
+export function normalizeLanguageCode(lang: string): string {
+    const langMap: Record<string, string> = {
         'zh_TW': 'zh-tw',
         'zh_CN': 'zh-cn',
         'ja': 'ja',
@@ -15,7 +15,15 @@ export function getSiteDefaultLanguage(): SupportedLanguage {
         'th': 'th',
         'en': 'en'
     };
-    return langMap[siteConfig.lang] || 'en';
+    return langMap[lang] || lang.toLowerCase().replace('_', '-');
+}
+
+/**
+ * Get the default language key from siteConfig
+ * Maps siteConfig.lang (like 'zh_TW') to URL key (like 'zh-tw')
+ */
+export function getSiteDefaultLanguage(): SupportedLanguage {
+    return normalizeLanguageCode(siteConfig.lang) as SupportedLanguage;
 }
 
 /**

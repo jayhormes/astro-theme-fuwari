@@ -23,7 +23,7 @@ const { lang } = Astro.params;
 
 const currentLang = lang || getSiteDefaultLanguage();
 
-const posts = await getSortedPosts();
+const posts = await getSortedPosts(lang);
 const title = i18n(I18nKey.archive, currentLang);
 ---
 

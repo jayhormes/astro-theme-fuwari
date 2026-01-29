@@ -6,7 +6,8 @@ import "@fontsource/roboto/700.css";
 import GlobalStyles from "@components/GlobalStyles.astro";
 import HrefLang from "@components/HrefLang.astro";
 import I18nUpdater from "@components/I18nUpdater.astro";
-import { profileConfig, siteConfig, getSupportedLanguages } from "@/config";
+import { siteConfig, getSupportedLanguages } from "@/config";
+import { getProfileConfig } from "@/utils/profile-utils";
 import {
 	AUTO_MODE,
 	BANNER_HEIGHT,
@@ -32,6 +33,9 @@ interface Props {
 }
 
 let { title, banner, description, lang, setOGTypeArticle } = Astro.props;
+
+// Get profile config for the current language
+const profileConf = getProfileConfig(lang);
 
 // apply a class to the body element to decide the height of the banner, only used for initial page load
 // Swup can update the body for each page visit, but it's after the page transition, causing a delay for banner height change
@@ -112,7 +116,7 @@ const bannerOffset =
 
 		<meta charset="UTF-8" />
 		<meta name="description" content={description || pageTitle}>
-		<meta name="author" content={profileConfig.name}>
+		<meta name="author" content={profileConf.name}>
 
 		<meta property="og:site_name" content={siteConfig.title}>
 		<meta property="og:url" content={Astro.url}>
@@ -181,7 +185,7 @@ const bannerOffset =
 
 		<slot name="head"></slot>
 
-		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
+		<link rel="alternate" type="application/rss+xml" title={profileConf.name} href={`${Astro.site}rss.xml`}/>
 
 	</head>
 	<body class=" min-h-screen transition " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}
@@ -729,7 +733,7 @@ if (window.swup) {
 </script>
 
 <!-- Professional mode configuration -->
-<script is:inline define:vars={{ isProfessionalModeEnabled: profileConfig.about?.enableProfessionalMode ?? false }}>
+<script is:inline define:vars={{ isProfessionalModeEnabled: profileConf.about?.enableProfessionalMode ?? false }}>
 // Set global configuration for professional mode
 window.professionalModeConfig = isProfessionalModeEnabled;
 

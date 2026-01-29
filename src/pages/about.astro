@@ -1,9 +1,11 @@
 ---
 
-import { getEntry, render } from "astro:content";
+import { render } from "astro:content";
 import Markdown from "@components/misc/Markdown.astro";
 import ProfileHeader from "@components/widget/ProfileHeader.astro";
-import { profileConfig, siteConfig } from "../config";
+import { siteConfig } from "../config";
+import { getProfileConfig } from "../utils/profile-utils";
+import { getSpecByLangAndName } from "../utils/spec-utils";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
@@ -12,7 +14,7 @@ import { getSiteDefaultLanguage } from "../utils/site-language-utils";
 // For root pages, use the site's configured default language
 const currentLang = getSiteDefaultLanguage();
 
-const aboutPost = await getEntry("spec", "about");
+const aboutPost = await getSpecByLangAndName("about", currentLang);
 
 if (!aboutPost) {
 	throw new Error("About page content not found");
@@ -21,7 +23,8 @@ if (!aboutPost) {
 const { Content } = await render(aboutPost);
 
 // Check if professional mode is enabled
-const isProfessionalMode = profileConfig.about?.enableProfessionalMode ?? false;
+const profileConf = getProfileConfig(currentLang);
+const isProfessionalMode = profileConf.about?.enableProfessionalMode ?? false;
 ---
 <MainGridLayout title={i18n(I18nKey.about, currentLang)} description={i18n(I18nKey.about, currentLang)} banner={siteConfig.pages?.about?.src} lang={currentLang}>
     {isProfessionalMode ? (
@@ -30,7 +33,7 @@ const isProfessionalMode = profileConfig.about?.enableProfessionalMode ?? false;
             <div class="w-full">
                 <!-- Compact Professional Header -->
                 <div class="mb-2">
-                    <ProfileHeader />
+                    <ProfileHeader lang={currentLang} />
                 </div>
                 
                 <!-- Content directly below header -->

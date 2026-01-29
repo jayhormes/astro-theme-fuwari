@@ -11,42 +11,45 @@ import { getSiteDefaultLanguage } from "../utils/site-language-utils";
 
 export async function getStaticPaths() {
     const supportedLanguages = getSupportedLanguages();
-    const allBlogPosts = await getSortedPosts();
-    
     const defaultLang = getSiteDefaultLanguage();
     
-    return Object.keys(supportedLanguages)
-        .filter(lang => lang !== defaultLang) // Exclude the default language because it uses the root route
-        .map(lang => ({
-            params: { lang },
+    const paths = [];
+    
+    for (const langKey of Object.keys(supportedLanguages)) {
+        if (langKey === defaultLang) continue; // Exclude default language
+        
+        // Get posts filtered by language
+        const langPosts = await getSortedPosts(langKey);
+        const totalPages = Math.ceil(langPosts.length / PAGE_SIZE);
+        
+        paths.push({
+            params: { lang: langKey },
             props: {
-                // For now, show the same posts for all languages
-                // Later we can filter posts by language if needed
                 page: {
-                    data: allBlogPosts.slice(0, PAGE_SIZE),
+                    data: langPosts.slice(0, PAGE_SIZE),
                     url: {
-                        current: `/${lang}/`,
+                        current: `/${langKey}/`,
                         prev: undefined,
-                        next: allBlogPosts.length > PAGE_SIZE ? `/${lang}/2/` : undefined,
+                        next: totalPages > 1 ? `/${langKey}/2/` : undefined,
+                        first: `/${langKey}/`,
+                        last: totalPages > 1 ? `/${langKey}/${totalPages}/` : `/${langKey}/`,
                     },
                     currentPage: 1,
-                    lastPage: Math.ceil(allBlogPosts.length / PAGE_SIZE),
+                    lastPage: totalPages,
+                    total: langPosts.length,
                     size: PAGE_SIZE,
-                    total: allBlogPosts.length,
                     start: 0,
-                    end: Math.min(PAGE_SIZE - 1, allBlogPosts.length - 1),
-                }
+                    end: Math.min(PAGE_SIZE - 1, langPosts.length - 1),
+                },
+                currentLang: langKey
             }
-        }));
+        });
+    }
+    
+    return paths;
 }
 
-const supportedLanguages = getSupportedLanguages();
-const { lang } = Astro.params;
-const { page } = Astro.props;
-
-// Set the current language for i18n functions
-const currentLang = lang || getSiteDefaultLanguage();
-
+const { page, currentLang } = Astro.props;
 const len = page.data.length;
 ---
 

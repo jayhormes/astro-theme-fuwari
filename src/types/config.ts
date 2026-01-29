@@ -106,6 +106,9 @@ export type ProfileConfig = {
 	};
 };
 
+// Multilingual Profile Config - allows different profile info per language
+export type MultilingualProfileConfig = Record<string, ProfileConfig>;
+
 export type LicenseConfig = {
 	enable: boolean;
 	name: string;

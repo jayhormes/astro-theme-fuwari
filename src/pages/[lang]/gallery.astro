@@ -22,7 +22,7 @@ export async function getStaticPaths() {
 const { lang } = Astro.params;
 const currentLang = lang || getSiteDefaultLanguage();
 
-const sortedPostsList = await getSortedPostsList();
+const sortedPostsList = await getSortedPostsList(lang);
 const galleryCollections = siteConfig.gallery?.collections || [];
 
 // Filter posts for each collection
