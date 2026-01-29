@@ -10,9 +10,6 @@ export type SiteConfig = {
 		hue: number;
 		fixed: boolean;
 	};
-	gallery: {
-		collections: GalleryCollection[];
-	};
 	banner: {
 		enable: boolean;
 		src: string;
@@ -65,6 +62,11 @@ export type GalleryCollection = {
 	description?: string;
 	tags: string[];
 	displayMode?: "grid" | "table";
+};
+
+// Multilingual Gallery Config - allows different collection names/descriptions per language
+export type MultilingualGalleryConfig = {
+	collections: GalleryCollection[];
 };
 
 export enum LinkPreset {

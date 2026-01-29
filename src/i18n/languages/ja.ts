@@ -47,4 +47,9 @@ export const ja: Translation = {
 	[Key.korean]: "한국어",
 	[Key.spanish]: "Español",
 	[Key.thai]: "ไทย",
+
+	// Gallery page
+	[Key.galleryFoundPosts]: "{count}件の投稿が見つかりました",
+	[Key.galleryNoPostsFound]: "このコレクションの投稿が見つかりませんでした。",
+	[Key.galleryTryAddingTags]: "次のタグを持つ投稿を追加してみてください：{tags}",
 };

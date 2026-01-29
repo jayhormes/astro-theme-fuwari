@@ -7,6 +7,9 @@ import type {
 } from "./types/config";
 import { LinkPreset } from "./types/config";
 
+// Export gallery config for multi-language support
+export { galleryConfig } from "./config/gallery";
+
 // All available languages in the i18n system
 export const availableLanguages = {
 	en: { code: "en", name: "English", flag: "🇺🇸" },
@@ -53,22 +56,6 @@ export const siteConfig: SiteConfig = {
 	themeColor: {
 		hue: 250, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
 		fixed: false, // Hide the theme color picker for visitors
-	},
-	gallery: {
-		collections: [
-			{
-				name: "Reading Notes",
-				description: "Collection of reading reviews and notes",
-				tags: ["reading"],
-				displayMode: "table",
-			},
-			{
-				name: "Travel Experiences",
-				description: "Travel blogs and experiences",
-				tags: ["travel"],
-				displayMode: "grid",
-			},
-		],
 	},
 	banner: {
 		enable: true,

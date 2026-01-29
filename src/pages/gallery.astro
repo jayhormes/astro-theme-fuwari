@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from "../config";
+import { getGalleryConfig } from "../utils/gallery-utils";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
@@ -10,7 +11,8 @@ import ImageWrapper from "../components/misc/ImageWrapper.astro";
 // Use the site's default language for the root /gallery page
 const defaultLang = getSiteDefaultLanguage();
 const sortedPostsList = await getSortedPostsList(defaultLang);
-const galleryCollections = siteConfig.gallery?.collections || [];
+const galleryConfig = getGalleryConfig(defaultLang);
+const galleryCollections = galleryConfig.collections;
 
 // Filter posts for each collection
 const collectionsWithPosts = galleryCollections.map((collection) => {
@@ -72,7 +74,7 @@ function getPostUrl(slug: string) {
                             ))}
                         </div>
                         <p class="text-sm text-neutral-500 dark:text-neutral-400">
-                            Found {collection.posts.length} posts
+                            {i18n(I18nKey.galleryFoundPosts).replace('{count}', String(collection.posts.length))}
                         </p>
                     </div>
 
@@ -171,8 +173,11 @@ function getPostUrl(slug: string) {
                         )
                     ) : (
                         <div class="text-center py-12">
-                            <p class="text-neutral-600 dark:text-neutral-400">
-                                No posts found for this collection. Try adding posts with tags: {collection.tags.join(', ')}
+                            <p class="text-neutral-600 dark:text-neutral-400 mb-2">
+                                {i18n(I18nKey.galleryNoPostsFound)}
+                            </p>
+                            <p class="text-sm text-neutral-500 dark:text-neutral-400">
+                                {i18n(I18nKey.galleryTryAddingTags).replace('{tags}', collection.tags.join(', '))}
                             </p>
                         </div>
                     )}

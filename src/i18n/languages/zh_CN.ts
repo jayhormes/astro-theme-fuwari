@@ -47,4 +47,9 @@ export const zh_CN: Translation = {
 	[Key.korean]: "한국어",
 	[Key.spanish]: "Español",
 	[Key.thai]: "ไทย",
+
+	// Gallery page
+	[Key.galleryFoundPosts]: "找到 {count} 篇文章",
+	[Key.galleryNoPostsFound]: "此集合没有找到文章。",
+	[Key.galleryTryAddingTags]: "请尝试添加包含以下标签的文章：{tags}",
 };

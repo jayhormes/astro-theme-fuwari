@@ -47,4 +47,9 @@ export const th: Translation = {
 	[Key.korean]: "한국어",
 	[Key.spanish]: "Español",
 	[Key.thai]: "ไทย",
+
+	// Gallery page
+	[Key.galleryFoundPosts]: "พบ {count} โพสต์",
+	[Key.galleryNoPostsFound]: "ไม่พบโพสต์สำหรับคอลเลกชันนี้",
+	[Key.galleryTryAddingTags]: "ลองเพิ่มโพสต์ที่มีป้ายกำกับ: {tags}",
 };

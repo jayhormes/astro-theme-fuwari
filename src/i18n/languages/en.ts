@@ -47,4 +47,9 @@ export const en: Translation = {
 	[Key.korean]: "한국어",
 	[Key.spanish]: "Español",
 	[Key.thai]: "ไทย",
+
+	// Gallery page
+	[Key.galleryFoundPosts]: "Found {count} posts",
+	[Key.galleryNoPostsFound]: "No posts found for this collection.",
+	[Key.galleryTryAddingTags]: "Try adding posts with tags: {tags}",
 };

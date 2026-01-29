@@ -47,4 +47,9 @@ export const es: Translation = {
 	[Key.korean]: "한국어",
 	[Key.spanish]: "Español",
 	[Key.thai]: "ไทย",
+
+	// Gallery page
+	[Key.galleryFoundPosts]: "Se encontraron {count} publicaciones",
+	[Key.galleryNoPostsFound]: "No se encontraron publicaciones para esta colección.",
+	[Key.galleryTryAddingTags]: "Intenta agregar publicaciones con las etiquetas: {tags}",
 };

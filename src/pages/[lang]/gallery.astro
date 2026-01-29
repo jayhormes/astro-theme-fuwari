@@ -1,6 +1,7 @@
 ---
 import { getSupportedLanguages } from "../../config";
 import { siteConfig } from "../../config";
+import { getGalleryConfig } from "../../utils/gallery-utils";
 import I18nKey from "../../i18n/i18nKey";
 import { i18n } from "../../i18n/translation";
 import MainGridLayout from "../../layouts/MainGridLayout.astro";
@@ -23,7 +24,8 @@ const { lang } = Astro.params;
 const currentLang = lang || getSiteDefaultLanguage();
 
 const sortedPostsList = await getSortedPostsList(lang);
-const galleryCollections = siteConfig.gallery?.collections || [];
+const galleryConfig = getGalleryConfig(currentLang);
+const galleryCollections = galleryConfig.collections;
 
 // Filter posts for each collection
 const collectionsWithPosts = galleryCollections.map((collection) => {
@@ -87,7 +89,7 @@ const title = i18n(I18nKey.gallery, currentLang);
                             ))}
                         </div>
                         <p class="text-sm text-neutral-500 dark:text-neutral-400">
-                            Found {collection.posts.length} posts
+                            {i18n(I18nKey.galleryFoundPosts, currentLang).replace('{count}', String(collection.posts.length))}
                         </p>
                     </div>
 
@@ -186,8 +188,11 @@ const title = i18n(I18nKey.gallery, currentLang);
                         )
                     ) : (
                         <div class="text-center py-12">
-                            <p class="text-neutral-600 dark:text-neutral-400">
-                                No posts found for this collection. Try adding posts with tags: {collection.tags.join(', ')}
+                            <p class="text-neutral-600 dark:text-neutral-400 mb-2">
+                                {i18n(I18nKey.galleryNoPostsFound, currentLang)}
+                            </p>
+                            <p class="text-sm text-neutral-500 dark:text-neutral-400">
+                                {i18n(I18nKey.galleryTryAddingTags, currentLang).replace('{tags}', collection.tags.join(', '))}
                             </p>
                         </div>
                     )}

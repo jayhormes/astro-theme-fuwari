@@ -44,6 +44,11 @@ enum I18nKey {
 	korean = "korean",
 	spanish = "spanish",
 	thai = "thai",
+
+	// Gallery page
+	galleryFoundPosts = "galleryFoundPosts",
+	galleryNoPostsFound = "galleryNoPostsFound",
+	galleryTryAddingTags = "galleryTryAddingTags",
 }
 
 export default I18nKey;

@@ -47,4 +47,9 @@ export const ko: Translation = {
 	[Key.korean]: "한국어",
 	[Key.spanish]: "Español",
 	[Key.thai]: "ไทย",
+
+	// Gallery page
+	[Key.galleryFoundPosts]: "{count}개의 게시물을 찾았습니다",
+	[Key.galleryNoPostsFound]: "이 컬렉션에서 게시물을 찾을 수 없습니다.",
+	[Key.galleryTryAddingTags]: "다음 태그가 있는 게시물을 추가해 보세요: {tags}",
 };
