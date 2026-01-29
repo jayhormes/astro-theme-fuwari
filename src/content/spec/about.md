@@ -1,3 +1,7 @@
+---
+lang: en
+---
+
 # About
 
 Welcome to my professional portfolio and blog! This is the demo site for [Fuwari](https://github.com/saicaca/fuwari) - a modern, customizable blog template built with Astro.

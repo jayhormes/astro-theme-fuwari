@@ -1,9 +1,14 @@
 ---
 import { Icon } from "astro-icon/components";
-import { profileConfig } from "../../config";
+import { getProfileConfig } from "../../utils/profile-utils";
 import ImageWrapper from "../misc/ImageWrapper.astro";
 
-const config = profileConfig;
+interface Props {
+	lang?: string;
+}
+
+const { lang } = Astro.props;
+const config = getProfileConfig(lang);
 const aboutConfig = config.about || {};
 
 // Use professional avatar if available, otherwise fallback to regular avatar

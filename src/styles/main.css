@@ -245,6 +245,39 @@
     @apply cursor-zoom-in
 }
 
+/* Ensure content area respects layout boundaries */
+#swup-container {
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+#post-container {
+    min-width: 0;
+    max-width: 100%;
+}
+
+#content-wrapper {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.markdown-content {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Ensure all content respects container width on 2XL screens to leave space for TOC */
+@media (min-width: 1536px) {
+    #swup-container {
+        max-width: 100%;
+    }
+    
+    /* Ensure post container doesn't expand beyond reasonable width */
+    #post-container {
+        max-width: min(100%, 55rem);
+    }
+}
+
 ::selection {
     background-color: var(--selection-bg)
 }

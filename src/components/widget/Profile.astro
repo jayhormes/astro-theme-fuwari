@@ -1,10 +1,17 @@
 ---
 import { Icon } from "astro-icon/components";
-import { profileConfig } from "../../config";
+import { getProfileConfig } from "../../utils/profile-utils";
 import { url } from "../../utils/url-utils";
 import ImageWrapper from "../misc/ImageWrapper.astro";
 
-const config = profileConfig;
+interface Props {
+	lang?: string;
+	class?: string;
+	style?: string;
+}
+
+const { lang } = Astro.props;
+const config = getProfileConfig(lang);
 const className = Astro.props.class;
 const style = Astro.props.style;
 ---

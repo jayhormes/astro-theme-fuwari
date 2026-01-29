@@ -7,6 +7,48 @@ import type {
 } from "./types/config";
 import { LinkPreset } from "./types/config";
 
+// Export gallery config for multi-language support
+export { galleryConfig } from "./config/gallery";
+
+// All available languages in the i18n system
+export const availableLanguages = {
+	en: { code: "en", name: "English", flag: "🇺🇸" },
+	"zh-tw": { code: "zh_TW", name: "繁體中文", flag: "🇹🇼" },
+	"zh-cn": { code: "zh_CN", name: "简体中文", flag: "🇨🇳" },
+	ja: { code: "ja", name: "日本語", flag: "🇯🇵" },
+	ko: { code: "ko", name: "한국어", flag: "🇰🇷" },
+	es: { code: "es", name: "Español", flag: "🇪🇸" },
+	th: { code: "th", name: "ไทย", flag: "🇹🇭" },
+} as const;
+
+export type AvailableLanguage = keyof typeof availableLanguages;
+
+// User-configurable languages - modify this array to enable/disable languages
+export const enabledLanguages: AvailableLanguage[] = ["en", "zh-tw", "ja"];
+
+// Multilingual post settings
+export const multilingualSettings = {
+	// Behavior for posts without lang field in frontmatter
+	// 'default': Use siteConfig.lang as default (recommended for backward compatibility)
+	// 'strict': Require lang field in all posts (shows warning in dev mode)
+	legacyBehavior: 'default' as 'default' | 'strict',
+	
+	// Show warning in console for posts without lang field
+	warnMissingLang: true,
+};
+
+// Helper function to get supported languages based on user configuration
+export const getSupportedLanguages = () => {
+	return Object.fromEntries(
+		enabledLanguages.map((lang) => [lang, availableLanguages[lang]]),
+	) as Record<
+		AvailableLanguage,
+		(typeof availableLanguages)[AvailableLanguage]
+	>;
+};
+
+export type SupportedLanguage = (typeof enabledLanguages)[number];
+
 export const siteConfig: SiteConfig = {
 	title: "Fuwari",
 	subtitle: "Demo Site",
@@ -14,22 +56,6 @@ export const siteConfig: SiteConfig = {
 	themeColor: {
 		hue: 250, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
 		fixed: false, // Hide the theme color picker for visitors
-	},
-	gallery: {
-		collections: [
-			{
-				name: "Reading Notes",
-				description: "Collection of reading reviews and notes",
-				tags: ["reading"],
-				displayMode: "table",
-			},
-			{
-				name: "Travel Experiences",
-				description: "Travel blogs and experiences",
-				tags: ["travel"],
-				displayMode: "grid",
-			},
-		],
 	},
 	banner: {
 		enable: true,
@@ -105,47 +131,107 @@ export const navBarConfig: NavBarConfig = {
 	],
 };
 
-export const profileConfig: ProfileConfig = {
-	avatar: "assets/images/demo-avatar.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
-	name: "Lorem Ipsum",
-	bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-	links: [
-		{
-			name: "Twitter",
-			icon: "fa6-brands:twitter", // Visit https://icones.js.org/ for icon codes
-			// You will need to install the corresponding icon set if it's not already included
-			// `pnpm add @iconify-json/<icon-set-name>`
-			url: "https://twitter.com",
+// Multilingual profile configuration
+// You can configure different profile information for each language
+// If a language is not configured, it will fall back to the default language (siteConfig.lang)
+export const profileConfig: Record<string, ProfileConfig> = {
+	// English (default)
+	en: {
+		avatar: "assets/images/demo-avatar.png",
+		name: "Lorem Ipsum",
+		bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		links: [
+			{
+				name: "Twitter",
+				icon: "fa6-brands:twitter",
+				url: "https://twitter.com",
+			},
+			{
+				name: "Steam",
+				icon: "fa6-brands:steam",
+				url: "https://store.steampowered.com",
+			},
+			{
+				name: "GitHub",
+				icon: "fa6-brands:github",
+				url: "https://github.com/saicaca/fuwari",
+			},
+		],
+		about: {
+			avatar: "assets/images/demo-avatar.png",
+			title: "Lorem Ipsum",
+			subtitle: "Full Stack Developer & UI/UX Enthusiast",
+			enableProfessionalMode: true,
+			badge: {
+				enable: true,
+				icon: "fa6-solid:briefcase",
+			},
 		},
-		{
-			name: "Steam",
-			icon: "fa6-brands:steam",
-			url: "https://store.steampowered.com",
+	},
+	// Traditional Chinese
+	"zh-tw": {
+		avatar: "assets/images/demo-avatar.png",
+		name: "示範帳號",
+		bio: "這是一個示範部落格，展示多語言功能。",
+		links: [
+			{
+				name: "推特",
+				icon: "fa6-brands:twitter",
+				url: "https://twitter.com",
+			},
+			{
+				name: "Steam",
+				icon: "fa6-brands:steam",
+				url: "https://store.steampowered.com",
+			},
+			{
+				name: "GitHub",
+				icon: "fa6-brands:github",
+				url: "https://github.com/saicaca/fuwari",
+			},
+		],
+		about: {
+			avatar: "assets/images/demo-avatar.png",
+			title: "示範帳號",
+			subtitle: "全端工程師與 UI/UX 愛好者",
+			enableProfessionalMode: true,
+			badge: {
+				enable: true,
+				icon: "fa6-solid:briefcase",
+			},
 		},
-		{
-			name: "GitHub",
-			icon: "fa6-brands:github",
-			url: "https://github.com/saicaca/fuwari",
-		},
-	],
-	about: {
-		// Professional configuration for About page
-		avatar: "assets/images/demo-avatar.png", // Professional avatar (optional, falls back to main avatar)
-		title: "Lorem Ipsum", // Professional title (optional, falls back to name)
-		subtitle: "Full Stack Developer & UI/UX Enthusiast", // Professional subtitle (optional, falls back to bio)
-		enableProfessionalMode: true, // Enable professional mode (shows professional header + full width layout, hides sidebar)
-		badge: {
-			enable: true, // Enable/disable the professional badge
-			icon: "fa6-solid:briefcase", // Icon for the badge (visit https://icones.js.org/ for icon codes)
-			// Alternative icons you can try:
-			// "fa6-solid:user-tie" - Professional user with tie
-			// "fa6-solid:graduation-cap" - Education/academic
-			// "fa6-solid:code" - Developer/programmer
-			// "fa6-solid:star" - Achievement/excellence
-			// "fa6-solid:certificate" - Certification
-			// "fa6-solid:award" - Award/recognition
-			// "fa6-solid:crown" - Premium/excellence
-			// "fa6-solid:gem" - Premium/luxury
+	},
+	// Japanese
+	ja: {
+		avatar: "assets/images/demo-avatar.png",
+		name: "デモアカウント",
+		bio: "これは多言語機能を紹介するデモブログです。",
+		links: [
+			{
+				name: "ツイッター",
+				icon: "fa6-brands:twitter",
+				url: "https://twitter.com",
+			},
+			{
+				name: "Steam",
+				icon: "fa6-brands:steam",
+				url: "https://store.steampowered.com",
+			},
+			{
+				name: "GitHub",
+				icon: "fa6-brands:github",
+				url: "https://github.com/saicaca/fuwari",
+			},
+		],
+		about: {
+			avatar: "assets/images/demo-avatar.png",
+			title: "デモアカウント",
+			subtitle: "フルスタック開発者 & UI/UX愛好家",
+			enableProfessionalMode: true,
+			badge: {
+				enable: true,
+				icon: "fa6-solid:briefcase",
+			},
 		},
 	},
 };

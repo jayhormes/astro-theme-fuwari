@@ -1,6 +1,9 @@
 @tailwind components;
 
 .custom-md {
+    max-width: 100%;
+    word-wrap: break-word;
+    
     h1 {
         @apply text-3xl;
     }
@@ -91,6 +94,14 @@
 
     .expressive-code {
         @apply my-4;
+        max-width: 100%;
+        overflow-x: auto;
+        
+        /* Ensure code blocks respect container width */
+        & > figure {
+            max-width: 100%;
+        }
+        
         ::selection {
             @apply bg-[var(--codeblock-selection)];
         }
