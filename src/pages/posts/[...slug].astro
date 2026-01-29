@@ -14,13 +14,35 @@ import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import PostMetadata from "../../components/PostMeta.astro";
 import { siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
+import { getPostLanguage } from "@utils/post-language-utils";
 
 export async function getStaticPaths() {
-	const blogEntries = await getSortedPosts();
-	return blogEntries.map((entry) => ({
-		params: { slug: entry.slug },
-		props: { entry },
-	}));
+	// Get all posts without language filter to generate all pages
+	const allPosts = await getSortedPosts();
+	
+	// For each post, get sorted posts in the same language to set correct prev/next
+	const paths = [];
+	for (const entry of allPosts) {
+		const postLang = getPostLanguage(entry.slug, entry.data.lang);
+		const postsInSameLang = await getSortedPosts(postLang);
+		
+		// Find current post in the filtered list and set prev/next
+		const currentIndex = postsInSameLang.findIndex(p => p.slug === entry.slug);
+		if (currentIndex !== -1) {
+			// Set nextSlug/prevSlug based on posts in the same language
+			entry.data.nextSlug = currentIndex > 0 ? postsInSameLang[currentIndex - 1].slug : "";
+			entry.data.nextTitle = currentIndex > 0 ? postsInSameLang[currentIndex - 1].data.title : "";
+			entry.data.prevSlug = currentIndex < postsInSameLang.length - 1 ? postsInSameLang[currentIndex + 1].slug : "";
+			entry.data.prevTitle = currentIndex < postsInSameLang.length - 1 ? postsInSameLang[currentIndex + 1].data.title : "";
+		}
+		
+		paths.push({
+			params: { slug: entry.slug },
+			props: { entry },
+		});
+	}
+	
+	return paths;
 }
 
 const { entry } = Astro.props;
