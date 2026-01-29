@@ -26,11 +26,14 @@ export const enabledLanguages: AvailableLanguage[] = ["en", "zh-tw", "ja"];
 // Helper function to get supported languages based on user configuration
 export const getSupportedLanguages = () => {
 	return Object.fromEntries(
-		enabledLanguages.map(lang => [lang, availableLanguages[lang]])
-	) as Record<AvailableLanguage, typeof availableLanguages[AvailableLanguage]>;
+		enabledLanguages.map((lang) => [lang, availableLanguages[lang]]),
+	) as Record<
+		AvailableLanguage,
+		(typeof availableLanguages)[AvailableLanguage]
+	>;
 };
 
-export type SupportedLanguage = typeof enabledLanguages[number];
+export type SupportedLanguage = (typeof enabledLanguages)[number];
 
 export const siteConfig: SiteConfig = {
 	title: "Fuwari",

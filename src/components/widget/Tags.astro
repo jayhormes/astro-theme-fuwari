@@ -39,7 +39,7 @@ interface Props {
 }
 const { class: className, style }: Props = Astro.props;
 ---
-<WidgetLayout name={i18n(I18nKey.tags)} id="tags" isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT} class={className} style={style}>
+<WidgetLayout name={i18n(I18nKey.tags)} nameKey={I18nKey.tags} id="tags" isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT} class={className} style={style}>
     <div class="flex gap-2 flex-wrap p-1">
         {tags.map(t => (
             <ButtonTag 
