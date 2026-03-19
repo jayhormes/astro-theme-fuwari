@@ -1,5 +1,15 @@
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
+import { getPostRouteInfo } from "./post-language-utils";
+
+type PostUrlInput =
+	| string
+	| {
+		slug: string;
+		data?: { lang?: string };
+		filePath?: string;
+		id?: string;
+	  };
 
 export function pathsEqual(path1: string, path2: string) {
 	const normalizedPath1 = path1.replace(/^\/|\/$/g, "").toLowerCase();
@@ -12,8 +22,16 @@ function joinUrl(...parts: string[]): string {
 	return joined.replace(/\/+/g, "/");
 }
 
-export function getPostUrlBySlug(slug: string): string {
-	return url(`/posts/${slug}/`);
+export function getPostUrlBySlug(input: PostUrlInput): string {
+	if (typeof input === "string") {
+		return url(`/posts/${input}/`);
+	}
+
+	const route = getPostRouteInfo(input.slug, {
+		frontmatterLang: input.data?.lang,
+		filePathOrId: input.filePath ?? input.id,
+	});
+	return url(`/posts/${route.routeSlug.join("/")}/`);
 }
 
 export function getTagUrl(tag: string): string {
